@@ -1,0 +1,220 @@
+/* ===============================================================
+   profile.css - Page Profil & Mes Reservations
+   Responsable : Oumayma
+   =============================================================== */
+
+   .profile-page {
+    min-height: 100vh;
+    padding-top: 90px;
+    padding-bottom: 80px;
+}
+
+/* ── Hero ──────────────────────────────────────────────────────── */
+.profile-hero {
+    position: relative;
+    padding: 48px 24px 56px;
+    overflow: hidden;
+}
+
+.profile-hero-glow {
+    position: absolute; inset: 0;
+    background:
+        radial-gradient(ellipse at 70% 50%, rgba(201,169,98,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 50%, rgba(201,169,98,0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.profile-hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(201,169,98,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,98,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+.profile-hero-inner {
+    max-width: 1280px; margin: 0 auto;
+    position: relative; z-index: 1;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    gap: 32px; flex-wrap: wrap;
+}
+
+.profile-identity { display: flex; align-items: center; gap: 24px; }
+
+.profile-avatar {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 700; color: var(--bg);
+    border: 2px solid rgba(201,169,98,0.3);
+    box-shadow: 0 0 0 6px rgba(201,169,98,0.07);
+    flex-shrink: 0;
+}
+
+.profile-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 6px; }
+.profile-name  { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; font-style: italic; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
+.profile-email { font-size: 13px; color: var(--muted); }
+
+.profile-hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+
+.profile-stats-quick { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.profile-stat-quick {
+    text-align: center; padding: 14px 22px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-md); min-width: 90px;
+    transition: all 0.3s ease;
+}
+.profile-stat-quick:hover { background: rgba(201,169,98,0.04); border-color: rgba(201,169,98,0.15); }
+
+.profile-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; color: var(--accent); line-height: 1; }
+.profile-stat-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 4px; }
+
+.btn-logout {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 18px;
+    background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 100px; color: #ef4444;
+    font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: all 0.3s ease;
+}
+.btn-logout:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); }
+
+/* ── Content ───────────────────────────────────────────────────── */
+.profile-content { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+/* Tabs */
+.profile-tabs { display: flex; gap: 4px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 32px; }
+
+.profile-tab {
+    padding: 12px 20px; font-size: 13px; font-weight: 500; color: var(--muted);
+    cursor: pointer; border: none; background: none; font-family: 'DM Sans', sans-serif;
+    transition: all 0.3s ease; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.profile-tab:hover  { color: var(--fg); }
+.profile-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Reservations ──────────────────────────────────────────────── */
+.reservations-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+
+.reservations-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; font-style: italic; }
+
+.filter-tabs { display: flex; gap: 8px; }
+
+.filter-tab {
+    padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.08); background: transparent;
+    color: var(--muted); font-family: 'DM Sans', sans-serif; transition: all 0.25s ease;
+}
+.filter-tab:hover  { color: var(--fg); border-color: rgba(255,255,255,0.15); }
+.filter-tab.active { background: rgba(201,169,98,0.1); border-color: rgba(201,169,98,0.3); color: var(--accent); }
+
+/* Carte reservation */
+.reservation-card {
+    background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: var(--radius-lg); padding: 22px;
+    display: grid; grid-template-columns: 110px 1fr auto;
+    gap: 20px; align-items: center;
+    transition: all 0.3s ease; margin-bottom: 10px;
+    position: relative; overflow: hidden;
+}
+.reservation-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: transparent; transition: background 0.3s ease;
+}
+.reservation-card:hover { border-color: rgba(201,169,98,0.18); transform: translateX(4px); }
+.reservation-card:hover::before { background: var(--accent); }
+
+.reservation-img {
+    width: 110px; height: 75px; border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(201,169,98,0.08), rgba(139,115,64,0.04));
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0; color: rgba(201,169,98,0.2);
+}
+.reservation-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.reservation-car-badge {
+    display: inline-block; padding: 3px 10px;
+    background: rgba(201,169,98,0.08); border: 1px solid rgba(201,169,98,0.15);
+    border-radius: 20px; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px;
+}
+.reservation-car-name  { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; }
+.reservation-dates     { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.reservation-dates svg { color: var(--accent); flex-shrink: 0; }
+.reservation-price     { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+.reservation-price span { font-size: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+.reservation-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+
+/* Badges statut */
+.status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-confirmee { background: rgba(13,148,136,0.1); border: 1px solid rgba(13,148,136,0.25); color: #0d9488; }
+.status-annulee   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: #ef4444; }
+
+.btn-annuler {
+    padding: 7px 14px; background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.18); border-radius: 100px;
+    color: #ef4444; font-size: 11px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; text-transform: uppercase;
+    letter-spacing: 0.05em; cursor: pointer; transition: all 0.3s ease;
+}
+.btn-annuler:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); }
+
+/* Skeleton */
+.skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius-lg); }
+.skeleton-card { height: 120px; margin-bottom: 10px; }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 72px 24px; }
+.empty-state-icon { width: 72px; height: 72px; border-radius: 50%; background: rgba(201,169,98,0.06); border: 1px solid rgba(201,169,98,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: rgba(201,169,98,0.35); }
+.empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-style: italic; font-weight: 600; margin-bottom: 8px; }
+.empty-state p  { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+
+/* ── Tab Compte ────────────────────────────────────────────────── */
+.account-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; font-style: italic; margin-bottom: 24px; }
+.account-card { max-width: 560px; }
+.account-info-row { padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.account-info-row:last-child { border: none; }
+.account-info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 6px; }
+.account-info-value { font-size: 15px; font-weight: 500; color: var(--fg); }
+
+/* ── Modal ─────────────────────────────────────────────────────── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(7,7,9,0.85); backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; max-width: 420px; width: 100%; position: relative; }
+.modal-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,169,98,0.4), transparent); }
+.modal-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; color: #ef4444; }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; font-style: italic; text-align: center; margin-bottom: 8px; }
+.modal-desc  { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 28px; }
+.modal-actions { display: flex; gap: 10px; }
+.btn-modal-cancel  { flex: 1; padding: 13px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+.btn-modal-cancel:hover { color: var(--fg); border-color: rgba(255,255,255,0.2); }
+.btn-modal-confirm { flex: 1; padding: 13px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: var(--radius-md); color: #ef4444; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; transition: all 0.3s ease; }
+.btn-modal-confirm:hover { background: rgba(239,68,68,0.18); }
+
+/* ── Toast ─────────────────────────────────────────────────────── */
+.toast { position: fixed; bottom: 28px; right: 28px; padding: 13px 18px; border-radius: var(--radius-md); font-size: 13px; display: none; align-items: center; gap: 10px; z-index: 300; animation: toastIn 0.4s ease; max-width: 320px; }
+.toast.show    { display: flex; }
+.toast.success { background: rgba(13,148,136,0.12); border: 1px solid rgba(13,148,136,0.25); color: #5eead4; }
+.toast.error   { background: rgba(239,68,68,0.12);  border: 1px solid rgba(239,68,68,0.25);  color: #fca5a5; }
+@keyframes toastIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .reservation-card    { grid-template-columns: 1fr; }
+    .reservation-img     { width: 100%; height: 140px; }
+    .reservation-actions { flex-direction: row; justify-content: flex-start; flex-wrap: wrap; }
+    .profile-identity    { flex-direction: column; text-align: center; }
+    .profile-hero-inner  { justify-content: center; text-align: center; }
+    .profile-hero-right  { align-items: center; }
+    .profile-stats-quick { justify-content: center; }
+    .reservations-header { flex-direction: column; align-items: flex-start; }
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RideWave | Mon Profil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/profile.css" />
+  </head>
+  <body>
+    <!-- Navbar injectée par main.js -->
+    <div id="nav-placeholder"></div>
+
+    <div class="profile-page">
+      <!-- ══ HERO PROFIL ══════════════════════════════════════════ -->
+      <div class="profile-hero">
+        <div class="profile-hero-glow"></div>
+        <div class="profile-hero-grid"></div>
+
+        <div class="profile-hero-inner">
+          <!-- Identité -->
+          <div class="profile-identity">
+            <div class="profile-avatar" id="profile-avatar">?</div>
+            <div>
+              <div class="profile-label">Mon espace</div>
+              <div class="profile-name" id="profile-name">Chargement...</div>
+              <div class="profile-email" id="profile-email"></div>
+            </div>
+          </div>
+
+          <!-- Stats + Déconnexion -->
+          <div class="profile-hero-right">
+            <div class="profile-stats-quick">
+              <div class="profile-stat-quick">
+                <div class="profile-stat-val" id="stat-total">—</div>
+                <div class="profile-stat-lbl">Réservations</div>
+              </div>
+              <div class="profile-stat-quick">
+                <div
+                  class="profile-stat-val"
+                  id="stat-confirmees"
+                  style="color: #0d9488"
+                >
+                  —
+                </div>
+                <div class="profile-stat-lbl">Confirmées</div>
+              </div>
+              <div class="profile-stat-quick">
+                <div
+                  class="profile-stat-val"
+                  id="stat-annulees"
+                  style="color: #ef4444"
+                >
+                  —
+                </div>
+                <div class="profile-stat-lbl">Annulées</div>
+              </div>
+            </div>
+
+            <button class="btn-logout" id="btn-logout">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CONTENT ══════════════════════════════════════════════ -->
+      <div class="profile-content">
+        <!-- Tabs -->
+        <div class="profile-tabs">
+          <button class="profile-tab active" data-tab="reservations">
+            Mes réservations
+          </button>
+          <button class="profile-tab" data-tab="compte">Mon compte</button>
+        </div>
+
+        <!-- Tab : Réservations -->
+        <div id="tab-reservations">
+          <div class="reservations-header">
+            <h2 class="reservations-title">Historique</h2>
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all">
+                Toutes
+              </button>
+              <button class="filter-tab" data-filter="confirmee">
+                Confirmées
+              </button>
+              <button class="filter-tab" data-filter="annulee">Annulées</button>
+            </div>
+          </div>
+
+          <!-- Skeletons chargement -->
+          <div id="reservations-loading">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+          </div>
+
+          <!-- Liste des réservations -->
+          <div id="reservations-list" style="display: none"></div>
+
+          <!-- Empty state -->
+          <div class="empty-state" id="empty-state" style="display: none">
+            <div class="empty-state-icon">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"
+                />
+                <rect x="9" y="11" width="14" height="10" rx="2" />
+                <circle cx="12" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+              </svg>
+            </div>
+            <h3>Aucune réservation</h3>
+            <p>Vous n'avez pas encore effectué de réservation.</p>
+            <a href="/views/voitures.html" class="btn-luxury">
+              <span class="btn-inner">
+                Découvrir nos véhicules
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Tab : Mon Compte -->
+        <div id="tab-compte" style="display: none">
+          <h2 class="account-section-title">Informations</h2>
+          <div class="account-card glass-panel" style="padding: 28px">
+            <div class="account-info-row">
+              <div class="account-info-label">Nom</div>
+              <div class="account-info-value" id="info-nom">—</div>
+            </div>
+            <div class="account-info-row">
+              <div class="account-info-label">Email</div>
+              <div class="account-info-value" id="info-email">—</div>
+            </div>
+            <div class="account-info-row">
+              <div class="account-info-label">Rôle</div>
+              <div class="account-info-value" id="info-role">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODAL ANNULATION ═════════════════════════════════════════ -->
+    <div class="modal-overlay" id="cancel-modal">
+      <div class="modal-box">
+        <div class="modal-icon">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"
+            />
+          </svg>
+        </div>
+        <div class="modal-title">Annuler la réservation ?</div>
+        <div class="modal-desc">
+          Cette action est irréversible. Votre réservation sera annulée et les
+          dates seront de nouveau disponibles.
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" id="modal-cancel-btn">
+            Non, garder
+          </button>
+          <button class="btn-modal-confirm" id="modal-confirm-btn">
+            Oui, annuler
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TOAST ════════════════════════════════════════════════════ -->
+    <div class="toast" id="toast">
+      <svg
+        id="toast-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span id="toast-text"></span>
+    </div>
+
+    <!-- Footer injecté par main.js -->
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/profile.js"></script>
+  </body>
+</html>
