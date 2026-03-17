@@ -1,11 +1,11 @@
-/* ═══════════════════════════════════════════════════════════════
-   auth.js — Authentification (Login + Register)
+/* ===============================================================
+   auth.js - Authentification (Login + Register)
    Responsable : Oumayma
-   Phase 1 : données statiques
+   Phase 1 : donnees statiques
    Phase 2 : remplacer par les vrais fetch()
-   ═══════════════════════════════════════════════════════════════ */
+   =============================================================== */
 
-/* ─── Données statiques Phase 1 ─────────────────────────────── */
+/* --- Donnees statiques Phase 1 -------------------------------- */
 const FAKE_USERS = [
   {
     id: 1,
@@ -30,7 +30,11 @@ const FAKE_USERS = [
   },
 ];
 
-/* ─── Utilitaires ────────────────────────────────────────────── */
+/* ===============================================================
+     UTILITAIRES COMMUNS
+     =============================================================== */
+
+/* Message global en haut — utilise seulement pour LOGIN */
 function showMessage(boxId, textId, message, type) {
   const box = document.getElementById(boxId);
   const text = document.getElementById(textId);
@@ -39,6 +43,7 @@ function showMessage(boxId, textId, message, type) {
   text.textContent = message;
 }
 
+/* Cache le message apres X ms */
 function hideMessageAfter(boxId, delay) {
   setTimeout(() => {
     const box = document.getElementById(boxId);
@@ -46,6 +51,66 @@ function hideMessageAfter(boxId, delay) {
   }, delay);
 }
 
+/* Affiche message sous un champ (register) */
+function showFieldError(inputId, hintId, message) {
+  const input = document.getElementById(inputId);
+  const hint = document.getElementById(hintId);
+  if (input) {
+    input.style.borderColor = "rgba(239,68,68,0.6)";
+    input.style.background = "rgba(239,68,68,0.04)";
+    input.style.boxShadow = "0 0 0 3px rgba(239,68,68,0.07)";
+  }
+  if (hint) {
+    hint.textContent = "✕  " + message;
+    hint.className = "register-hint visible error";
+  }
+}
+
+/* Efface l'erreur d'un champ quand l'utilisateur retape */
+function clearFieldError(inputId, hintId) {
+  const input = document.getElementById(inputId);
+  const hint = document.getElementById(hintId);
+  if (!input) return;
+  input.addEventListener("input", () => {
+    input.style.borderColor = "";
+    input.style.background = "";
+    input.style.boxShadow = "";
+    if (hint) {
+      hint.className = "register-hint";
+      hint.textContent = "";
+    }
+  });
+}
+
+/* Remet tous les champs register a leur etat normal */
+function resetAllRegisterErrors() {
+  const fields = [
+    { input: "register-nom", hint: "register-hint-nom" },
+    { input: "register-email", hint: "register-hint-email" },
+    { input: "register-password", hint: "register-hint-pass" },
+    { input: "register-password2", hint: "register-hint-pass2" },
+  ];
+  fields.forEach(({ input, hint }) => {
+    const el = document.getElementById(input);
+    const hEl = document.getElementById(hint);
+    if (el) {
+      el.style.borderColor = "";
+      el.style.background = "";
+      el.style.boxShadow = "";
+    }
+    if (hEl) {
+      hEl.className = "register-hint";
+      hEl.textContent = "";
+    }
+  });
+  const cguHint = document.getElementById("register-hint-cgu");
+  if (cguHint) {
+    cguHint.className = "register-hint";
+    cguHint.textContent = "";
+  }
+}
+
+/* Active / desactive le bouton submit avec spinner */
 function setLoading(btnId, innerId, spinnerId, loading) {
   const btn = document.getElementById(btnId);
   const inner = document.getElementById(innerId);
@@ -56,6 +121,7 @@ function setLoading(btnId, innerId, spinnerId, loading) {
   if (spinner) spinner.style.display = loading ? "block" : "none";
 }
 
+/* Redirige selon le role apres connexion */
 function redirectAfterLogin(user) {
   const voitureId = sessionStorage.getItem("voiture_id");
   if (user.role === "admin") {
@@ -74,13 +140,12 @@ function redirectAfterLogin(user) {
   }
 }
 
-/* ─── Toggle password visibility ────────────────────────────── */
+/* Toggle password visibility */
 function setupTogglePassword(btnId, fieldId, iconId) {
   const btn = document.getElementById(btnId);
   const field = document.getElementById(fieldId);
   const icon = document.getElementById(iconId);
   if (!btn || !field || !icon) return;
-
   btn.addEventListener("click", () => {
     const isPassword = field.type === "password";
     field.type = isPassword ? "text" : "password";
@@ -90,16 +155,29 @@ function setupTogglePassword(btnId, fieldId, iconId) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   LOGIN
-   ═══════════════════════════════════════════════════════════════ */
+/* ===============================================================
+     LOGIN
+     =============================================================== */
 function initLogin() {
   const form = document.getElementById("login-form");
   if (!form) return;
 
   setupTogglePassword("login-eye-btn", "login-password", "login-eye-icon");
 
-  /* Mot de passe oublié → message temporaire */
+  /* Efface erreur quand l'utilisateur retape */
+  ["login-email", "login-password"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      el.style.borderColor = "";
+      el.style.background = "";
+      el.style.boxShadow = "";
+      const msg = document.getElementById("login-msg");
+      if (msg) msg.className = "login-message";
+    });
+  });
+
+  /* Mot de passe oublie */
   const forgotLink = document.getElementById("forgot-link");
   if (forgotLink) {
     forgotLink.addEventListener("click", (e) => {
@@ -120,56 +198,75 @@ function initLogin() {
     const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
 
-    /* Validation */
-    if (!email || !password) {
+    document.getElementById("login-msg").className = "login-message";
+
+    if (!email) {
       showMessage(
         "login-msg",
         "login-msg-text",
-        "Veuillez remplir tous les champs.",
+        "L'adresse email est requise.",
         "error"
       );
+      document.getElementById("login-email").style.borderColor =
+        "rgba(239,68,68,0.6)";
+      document.getElementById("login-email").style.background =
+        "rgba(239,68,68,0.04)";
+      return;
+    }
+    if (!password) {
+      showMessage(
+        "login-msg",
+        "login-msg-text",
+        "Le mot de passe est requis.",
+        "error"
+      );
+      document.getElementById("login-password").style.borderColor =
+        "rgba(239,68,68,0.6)";
+      document.getElementById("login-password").style.background =
+        "rgba(239,68,68,0.04)";
       return;
     }
 
     setLoading("login-btn", "login-btn-inner", "login-spinner", true);
-    document.getElementById("login-msg").className = "login-message";
 
-    /* ── PHASE 1 — données statiques ── */
+    /* PHASE 1 */
     setTimeout(() => {
       const user = FAKE_USERS.find(
         (u) => u.email === email && u.password === password
       );
-
       if (!user) {
         showMessage(
           "login-msg",
           "login-msg-text",
-          "Identifiants incorrects.",
+          "Email ou mot de passe incorrect.",
           "error"
         );
+        document.getElementById("login-email").style.borderColor =
+          "rgba(239,68,68,0.6)";
+        document.getElementById("login-password").style.borderColor =
+          "rgba(239,68,68,0.6)";
         setLoading("login-btn", "login-btn-inner", "login-spinner", false);
         return;
       }
-
       localStorage.setItem("token", "fake-token-phase1");
       localStorage.setItem("user", JSON.stringify(user));
       redirectAfterLogin(user);
     }, 800);
-    /* ── FIN PHASE 1 ──
-           PHASE 2 : remplacer le setTimeout par :
-           const res  = await fetch('/api/users/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
-           const data = await res.json();
-           if (!res.ok) { showMessage(..., data.message, 'error'); setLoading(..., false); return; }
-           localStorage.setItem('token', data.token);
-           localStorage.setItem('user',  JSON.stringify(data.user));
-           redirectAfterLogin(data.user);
-        */
+    /*
+        PHASE 2 :
+        const res  = await fetch('/api/users/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
+        const data = await res.json();
+        if (!res.ok) { showMessage('login-msg','login-msg-text', data.message, 'error'); setLoading('login-btn','login-btn-inner','login-spinner', false); return; }
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user',  JSON.stringify(data.user));
+        redirectAfterLogin(data.user);
+      */
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   REGISTER
-   ═══════════════════════════════════════════════════════════════ */
+/* ===============================================================
+     REGISTER
+     =============================================================== */
 function initRegister() {
   const form = document.getElementById("register-form");
   if (!form) return;
@@ -185,11 +282,15 @@ function initRegister() {
     "register-eye-icon2"
   );
 
+  /* Efface erreur champ par champ quand l'utilisateur retape */
+  clearFieldError("register-nom", "register-hint-nom");
+  clearFieldError("register-email", "register-hint-email");
+  clearFieldError("register-password", "register-hint-pass");
+  clearFieldError("register-password2", "register-hint-pass2");
+
   /* Password strength */
   const passField = document.getElementById("register-password");
-  if (passField) {
-    passField.addEventListener("input", updateStrength);
-  }
+  if (passField) passField.addEventListener("input", updateStrength);
 
   /* Confirm password live check */
   const pass2 = document.getElementById("register-password2");
@@ -202,11 +303,27 @@ function initRegister() {
         return;
       }
       if (pass2.value === passField.value) {
-        hint.textContent = "✓ Mots de passe identiques";
+        hint.textContent = "Mots de passe identiques";
         hint.className = "register-hint visible success";
+        pass2.style.borderColor = "rgba(13,148,136,0.5)";
+        pass2.style.background = "";
+        pass2.style.boxShadow = "";
       } else {
-        hint.textContent = "✕ Mots de passe différents";
+        hint.textContent = "Mots de passe differents";
         hint.className = "register-hint visible error";
+        pass2.style.borderColor = "rgba(239,68,68,0.6)";
+      }
+    });
+  }
+
+  /* Efface erreur CGU quand on coche */
+  const cguCheck = document.getElementById("register-cgu");
+  if (cguCheck) {
+    cguCheck.addEventListener("change", () => {
+      const hint = document.getElementById("register-hint-cgu");
+      if (hint) {
+        hint.className = "register-hint";
+        hint.textContent = "";
       }
     });
   }
@@ -220,65 +337,69 @@ function initRegister() {
     const pass2Val = pass2 ? pass2.value : "";
     const cgu = document.getElementById("register-cgu")?.checked;
 
-    /* Validations */
+    /* Reset tous les champs */
+    resetAllRegisterErrors();
+
+    let hasError = false;
+
+    /* Validation champ par champ — message sous chaque champ */
     if (!nom) {
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Le nom est requis.",
-        "error"
+      showFieldError(
+        "register-nom",
+        "register-hint-nom",
+        "Le nom complet est requis."
       );
-      return;
+      hasError = true;
     }
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Adresse email invalide.",
-        "error"
+      showFieldError(
+        "register-email",
+        "register-hint-email",
+        "Adresse email invalide."
       );
-      return;
+      hasError = true;
     }
+
     if (password.length < 8) {
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Minimum 8 caractères requis.",
-        "error"
+      showFieldError(
+        "register-password",
+        "register-hint-pass",
+        "Minimum 8 caracteres requis."
       );
-      return;
+      hasError = true;
     }
-    if (password !== pass2Val) {
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Les mots de passe ne correspondent pas.",
-        "error"
+
+    if (pass2Val && password !== pass2Val) {
+      showFieldError(
+        "register-password2",
+        "register-hint-pass2",
+        "Les mots de passe ne correspondent pas."
       );
-      return;
+      hasError = true;
     }
-    if (!cgu) {
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Vous devez accepter les CGU.",
-        "error"
+
+    if (!pass2Val) {
+      showFieldError(
+        "register-password2",
+        "register-hint-pass2",
+        "Veuillez confirmer le mot de passe."
       );
-      return;
+      hasError = true;
     }
+
+    if (hasError) return;
 
     setLoading("register-btn", "register-btn-inner", "register-spinner", true);
-    document.getElementById("register-msg").className = "login-message";
 
-    /* ── PHASE 1 — simulation inscription ── */
+    /* PHASE 1 */
     setTimeout(() => {
       const existingUser = FAKE_USERS.find((u) => u.email === email);
       if (existingUser) {
-        showMessage(
-          "register-msg",
-          "register-msg-text",
-          "Cet email est déjà utilisé.",
-          "error"
+        showFieldError(
+          "register-email",
+          "register-hint-email",
+          "Cet email est deja utilise."
         );
         setLoading(
           "register-btn",
@@ -292,22 +413,15 @@ function initRegister() {
       const newUser = { id: Date.now(), nom, email, role: "client" };
       localStorage.setItem("token", "fake-token-phase1");
       localStorage.setItem("user", JSON.stringify(newUser));
-
-      showMessage(
-        "register-msg",
-        "register-msg-text",
-        "Compte créé avec succès ! Redirection...",
-        "success"
-      );
-      setTimeout(() => redirectAfterLogin(newUser), 1200);
+      redirectAfterLogin(newUser);
     }, 800);
-    /* ── FIN PHASE 1 ──
-           PHASE 2 : remplacer le setTimeout par le vrai fetch('/api/users/register')
-        */
+    /*
+        PHASE 2 : remplacer le setTimeout par le vrai fetch('/api/users/register')
+      */
   });
 }
 
-/* ─── Password strength ──────────────────────────────────────── */
+/* --- Password strength ---------------------------------------- */
 function updateStrength() {
   const val = document.getElementById("register-password")?.value || "";
   const wrap = document.getElementById("register-strength-wrap");
@@ -337,7 +451,7 @@ function updateStrength() {
   }
 }
 
-/* ─── Init ───────────────────────────────────────────────────── */
+/* --- Init ----------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   initLogin();
   initRegister();
