@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RIDEWAVE — Notre flotte de véhicules premium. Filtrez et réservez votre voiture d'exception.">
+  <title>RIDEWAVE | Notre Flotte</title>
+
+  <!-- Fonts Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS COMMUN -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- CSS SPÉCIFIQUE à la page Flotte -->
+  <link rel="stylesheet" href="/css/voiture.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════════ -->
+  <nav class="nav-container" id="navbar">
+    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+
+      <a href="/index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#070709" stroke-width="2.5">
+            <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+            <rect x="9" y="11" width="14" height="10" rx="2"/>
+            <circle cx="12" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+          </svg>
+        </div>
+        <span class="nav-logo-text">RIDE<span class="wave">Wave</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/index.html#vehicles" class="nav-link">Collection</a></li>
+        <li><a href="/views/voiture.html" class="nav-link active">Flotte</a></li>
+        <li><a href="/index.html#about" class="nav-link">À propos</a></li>
+        <li><a href="/index.html#contact-section" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="/views/login.html" class="nav-signin" id="nav-auth-link">Connexion</a>
+        <a href="/views/reservation.html" class="btn-reserve">
+          <span id="nav-reserve-label">Réserver</span>
+        </a>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <button id="mobileClose" class="mobile-close" aria-label="Fermer le menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a href="/index.html#vehicles" class="nav-link">Collection</a>
+    <a href="/views/voiture.html" class="nav-link">Flotte</a>
+    <a href="/index.html#about" class="nav-link">À propos</a>
+    <a href="/index.html#contact-section" class="nav-link">Contact</a>
+    <a href="/views/login.html" class="btn-reserve" style="margin-top:16px;"><span>Connexion</span></a>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       FLEET HERO
+  ══════════════════════════════════════════════════ -->
+  <section class="fleet-hero" aria-label="Notre flotte">
+    <div class="fleet-hero-bg" aria-hidden="true"></div>
+    <div class="fleet-hero-overlay" aria-hidden="true"></div>
+    <div class="fleet-hero-grid" aria-hidden="true"></div>
+    <div class="fleet-deco-line fleet-deco-line--left" aria-hidden="true"></div>
+    <div class="fleet-deco-line fleet-deco-line--right" aria-hidden="true"></div>
+
+    <div class="fleet-hero-content">
+      <div class="reveal-up">
+        <h1 class="fleet-hero-title">
+          Notre<br><em>Flotte</em>
+        </h1>
+      </div>
+      <p class="fleet-hero-sub reveal-up" style="transition-delay:0.1s;">
+        Des véhicules d'exception soigneusement sélectionnés pour chaque occasion.
+        Luxe, performance et confort réunis.
+      </p>
+
+      <!-- Mini stats -->
+      <div class="fleet-stats reveal-up" style="transition-delay:0.2s;">
+        <div class="fleet-stat">
+          <span class="fleet-stat-num">12</span>
+          <span class="fleet-stat-label">Véhicules</span>
+        </div>
+        <div class="fleet-stat-sep"></div>
+        <div class="fleet-stat">
+          <span class="fleet-stat-num">4</span>
+          <span class="fleet-stat-label">Catégories</span>
+        </div>
+        <div class="fleet-stat-sep"></div>
+        <div class="fleet-stat">
+          <span class="fleet-stat-num">24/7</span>
+          <span class="fleet-stat-label">Disponible</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="fleet-scroll-hint" aria-hidden="true">
+      <span>Découvrir</span>
+      <svg class="fleet-scroll-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       FILTER BAR
+  ══════════════════════════════════════════════════ -->
+  <section class="filter-section" aria-label="Filtres">
+    <div class="filter-container">
+      <div class="filter-bar glass-panel">
+
+        <!-- Label -->
+        <div class="filter-label-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filtrer
+        </div>
+
+        <!-- Controls -->
+        <div class="filter-controls">
+
+          <!-- Marque -->
+          <div class="filter-group">
+            <span class="filter-chip-label">Marque</span>
+            <select id="filter-marque" class="filter-select glass-panel">
+              <option value="">Toutes les marques</option>
+            </select>
+          </div>
+
+          <!-- Prix max -->
+          <div class="filter-group">
+            <span class="filter-chip-label">Prix max / jour</span>
+            <select id="filter-prix" class="filter-select glass-panel">
+              <option value="">Tous les prix</option>
+              <option value="150">≤ 150 TND</option>
+              <option value="300">≤ 300 TND</option>
+              <option value="400">≤ 400 TND</option>
+              <option value="500">≤ 500 TND</option>
+            </select>
+          </div>
+
+          <!-- Disponible uniquement -->
+          <div class="filter-group filter-group--toggle">
+            <span class="filter-chip-label">Disponibilité</span>
+            <label class="filter-toggle-label">
+              <input type="checkbox" id="filter-dispo" class="filter-checkbox">
+              <div class="filter-toggle-track">
+                <div class="filter-toggle-thumb"></div>
+              </div>
+              <span class="filter-toggle-text">Disponibles uniquement</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="filter-actions">
+          <span class="filter-count" id="filter-count">— véhicules</span>
+          <button class="filter-reset-btn" id="filter-reset" aria-label="Réinitialiser les filtres" title="Réinitialiser">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.87"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       CARS GRID
+  ══════════════════════════════════════════════════ -->
+  <section class="cars-section" aria-label="Liste des véhicules">
+    <div class="cars-container">
+
+      <!-- Grid (remplie par JS) -->
+      <div class="cars-grid" id="cars-grid"></div>
+
+      <!-- Empty state (caché par défaut) -->
+      <div class="cars-empty" id="cars-empty" style="display:none;" aria-live="polite">
+        <div class="cars-empty-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+          </svg>
+        </div>
+        <p class="cars-empty-title font-display">Aucun véhicule trouvé</p>
+        <p class="cars-empty-sub">Aucun véhicule ne correspond à vos filtres. Essayez d'élargir votre recherche.</p>
+        <button class="btn-outline" id="empty-reset-btn">Réinitialiser les filtres</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:0;" class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/index.html" class="nav-logo" style="margin-bottom:12px;display:inline-flex;">
+            <div class="nav-logo-icon" style="width:34px;height:34px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#070709" stroke-width="2.5">
+                <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+                <rect x="9" y="11" width="14" height="10" rx="2"/>
+                <circle cx="12" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+              </svg>
+            </div>
+            <span class="nav-logo-text" style="font-size:1.1rem;">RIDE<span class="wave">Wave</span></span>
+          </a>
+          <p>Excellence en location de véhicules premium depuis 2012. Chaque trajet, extraordinaire.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Entreprise</h4>
+          <ul class="footer-links">
+            <li><a href="/index.html#about">À propos</a></li>
+            <li><a href="#">Carrières</a></li>
+            <li><a href="#">Presse</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Court terme</a></li>
+            <li><a href="#">Long terme</a></li>
+            <li><a href="#">Chauffeur</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Support</h4>
+          <ul class="footer-links">
+            <li><a href="#">Centre d'aide</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Contact</h4>
+          <ul class="footer-links">
+            <li><a href="/index.html#contact-section">Envoyer un message</a></li>
+            <li><a href="tel:+21599999999">99 999 999</a></li>
+            <li><a href="mailto:hello@ridewave.com">hello@ridewave.com</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2024 RideWave. Tous droits réservés.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-link" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS COMMUN -->
+  <script src="/js/main.js"></script>
+
+  <!-- JS SPÉCIFIQUE à la page Flotte -->
+  <script src="/js/voiture.js"></script>
+
+</body>
+</html>
