@@ -11,7 +11,7 @@ const VEHICLES = [
         id: 1,
         name: 'Porsche 911 Turbo S',
         category: 'Sport',
-        price: 580,
+        price: 1950,
         image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80',
         description: 'The pinnacle of Porsche engineering. An icon refined across generations, delivering breathtaking performance with everyday usability.',
         specs: { power: '650', speed: '330', acceleration: '2.7s' }
@@ -20,7 +20,7 @@ const VEHICLES = [
         id: 2,
         name: 'Bentley Continental GT',
         category: 'Grand Tourer',
-        price: 450,
+        price: 1500,
         image: 'https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=800&q=80',
         description: 'The grand tourer reimagined. Where hand-crafted British luxury meets supercar performance across the most demanding roads.',
         specs: { power: '635', speed: '333', acceleration: '3.6s' }
@@ -29,7 +29,7 @@ const VEHICLES = [
         id: 3,
         name: 'Lamborghini Huracán',
         category: 'Supercar',
-        price: 690,
+        price: 2350,
         image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80',
         description: "Pure Italian ferocity. The Huracán distills decades of Sant'Agata excellence into a visceral, unforgettable driving experience.",
         specs: { power: '640', speed: '325', acceleration: '2.9s' }
@@ -38,7 +38,7 @@ const VEHICLES = [
         id: 4,
         name: 'Rolls-Royce Ghost',
         category: 'Luxury',
-        price: 750,
+        price: 2545,
         image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80',
         description: 'The most serene vehicle ever crafted. An effortless sanctuary of Starlight headliner, whisper-quiet refinement and unbounded presence.',
         specs: { power: '563', speed: '250', acceleration: '4.8s' }
@@ -47,7 +47,7 @@ const VEHICLES = [
         id: 5,
         name: 'Ferrari F8 Tributo',
         category: 'Supercar',
-        price: 820,
+        price: 2800,
         image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&q=80',
         description: 'A tribute to the most powerful V8 in Ferrari history. Aerodynamic perfection, track-bred dynamics and prancing horse heritage.',
         specs: { power: '720', speed: '340', acceleration: '2.9s' }
@@ -56,7 +56,7 @@ const VEHICLES = [
         id: 6,
         name: 'Mercedes-Maybach S',
         category: 'Berline',
-        price: 380,
+        price: 1300,
         image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
         description: 'The ultimate expression of automotive luxury. First-class rear accommodation, Burmester 4D surround sound and sculpted Teutonic elegance.',
         specs: { power: '496', speed: '250', acceleration: '4.5s' }
@@ -100,7 +100,7 @@ function renderVehicles(data) {
                     <div class="vehicle-img-wrap">
                         <img src="${v.image}" alt="${v.name}" class="vehicle-img" loading="lazy">
                         <div class="vehicle-price-badge">
-                            ${v.price}€<span class="price-unit">/jour</span>
+                            ${v.price}DT<span class="price-unit">/jour</span>
                         </div>
                         <div class="vehicle-category-badge">${v.category}</div>
                     </div>
@@ -143,7 +143,7 @@ function renderVehicles(data) {
 
                     <div class="back-card-footer">
                         <div class="back-price-display">
-                            <span class="back-price-value">${v.price}€</span>
+                            <span class="back-price-value">${v.price}DT</span>
                             <span class="back-price-unit">par jour</span>
                         </div>
                         <button class="back-book-btn" onclick="handleBooking(${v.id})">
