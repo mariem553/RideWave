@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Fichiers statiques
+// Fichiers statiques - mount at root
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 
@@ -32,16 +32,31 @@ app.get("/api/health", (req, res) => {
 
 // Pages admin
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "admin", "login.html"));
+  res.sendFile(path.join(__dirname, "views","login.html"));
 });
-app.get("/admin/*path", (req, res) => {
-  const page = req.params.path;
+app.get("/admin/:page", (req, res) => {
+  const page = req.params.page;
   res.sendFile(path.join(__dirname, "views", "admin", page));
 });
 
 // Page accueil
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
+});
+
+// Page voiture
+app.get("/voiture", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "voiture.html"));
+});
+
+// Page login
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "login.html"));
+});
+
+// Page register
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "register.html"));
 });
 
 const PORT = process.env.PORT || 3000;
