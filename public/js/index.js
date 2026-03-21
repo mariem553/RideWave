@@ -250,6 +250,17 @@ function setupBookingForm() {
         const btn  = form.querySelector('.btn-luxury');
         const orig = btn.innerHTML;
 
+        const location    = document.getElementById('location').value;
+        const vehicleType = document.getElementById('vehicle-model').value;
+        const startDate   = document.getElementById('start-date').value;
+        const endDate     = document.getElementById('end-date').value;
+
+        // Validation simple
+        if (!location || !vehicleType || !startDate || !endDate) {
+            alert('Veuillez remplir tous les champs');
+            return;
+        }
+
         btn.innerHTML = '<span class="btn-inner">Recherche en cours...</span>';
         btn.disabled = true;
         btn.style.opacity = '0.7';
@@ -264,10 +275,18 @@ function setupBookingForm() {
                 Résultats trouvés !
             </span>`;
 
-        await delay(2000);
-        btn.innerHTML = orig;
-        btn.disabled = false;
-        btn.style.opacity = '';
+        await delay(1500);
+
+        // Créer les URL params
+        const params = new URLSearchParams({
+            location: location,
+            type: vehicleType,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        // Naviguer vers voiture.html avec les paramètres
+        window.location.href = `/views/voiture.html?${params.toString()}`;
     });
 }
 
