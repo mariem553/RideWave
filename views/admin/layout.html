@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — RideWave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+
+<div class="admin-wrap">
+
+  <aside class="admin-sidebar" id="sidebar">
+
+    <div class="sb-bg"></div>
+    <div class="sb-gold-line"></div>
+
+    <!-- Logo -->
+    <div class="sb-header">
+      <div class="sb-crown">
+        <div class="sb-crown-line"></div>
+        <div class="sb-crown-text">Premium</div>
+        <div class="sb-crown-line"></div>
+      </div>
+      <div class="sb-logo">Ride<em>Wave</em></div>
+      <div class="sb-logo-sub">Location de voitures de luxe</div>
+    </div>
+
+    <div class="sb-sep"></div>
+
+    <!-- User -->
+    <div class="sb-user">
+      <div style="position:relative;">
+        <div class="sb-avatar" id="sidebar-avatar">A</div>
+        <div class="sb-status"></div>
+      </div>
+      <div>
+        <div class="sb-user-name" id="sidebar-nom">Administrateur</div>
+        <div class="sb-user-tag">Administrateur</div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sb-nav">
+      <div class="sb-group">Navigation</div>
+      <a href="#" class="sb-link sb-link-item active" data-page="dashboard" id="link-dashboard">
+        <div class="sb-link-dot"></div>
+        <span class="sb-link-text">Dashboard</span>
+      </a>
+      <a href="#" class="sb-link sb-link-item" data-page="voitures" id="link-voitures">
+        <div class="sb-link-dot"></div>
+        <span class="sb-link-text">Voitures</span>
+        <span class="sb-badge" id="badge-voitures">—</span>
+      </a>
+      <a href="#" class="sb-link sb-link-item" data-page="reservations" id="link-reservations">
+        <div class="sb-link-dot"></div>
+        <span class="sb-link-text">Réservations</span>
+        <span class="sb-badge alert" id="badge-reservations">—</span>
+      </a>
+    </nav>
+
+    <!-- Aperçu rapide -->
+    <div class="sb-apercu-wrap">
+      <div class="sb-apercu-header">
+        <div class="sb-apercu-title">Aperçu du jour</div>
+        <div class="sb-apercu-dot"></div>
+      </div>
+      <div class="sb-stats-grid">
+        <div class="sb-stat">
+          <div class="sb-stat-num" id="stat-voitures">—</div>
+          <div class="sb-stat-label">Voitures</div>
+          <div class="sb-stat-trend">↑ total flotte</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num" id="stat-dispo">—</div>
+          <div class="sb-stat-label">Disponibles</div>
+          <div class="sb-stat-trend">↑ en ligne</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num" id="stat-confirmees">—</div>
+          <div class="sb-stat-label">Confirmées</div>
+          <div class="sb-stat-trend">↑ actives</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num" id="stat-annulees">—</div>
+          <div class="sb-stat-label">Annulées</div>
+          <div class="sb-stat-trend down">↓ à traiter</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="sb-bottom">
+      <div class="sb-sep2"></div>
+      <button class="sb-logout" onclick="adminLogout()">
+        <div class="sb-logout-dot"></div>
+        Déconnexion
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="admin-main" id="page">
+  </main>
+
+</div>
+
+<script src="/js/layout.js"></script>
+</body>
+</html>
