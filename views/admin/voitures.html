@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voitures — RideWave Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css" />
+  <link rel="stylesheet" href="/css/voitures-admin.css" />
+</head>
+<body>
+  <script src="/js/sidebar.js"></script>
+
+  <main class="admin-main">
+
+    <div class="voitures-header">
+      <div>
+        <h1>Voitures</h1>
+        <p>Gérez votre flotte de véhicules</p>
+      </div>
+      <button class="btn-ajouter" onclick="openAdd()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Ajouter
+      </button>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="voitures-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Marque</th>
+            <th>Modèle</th>
+            <th>Année</th>
+            <th>Prix/jour</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="voitures-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- Modal -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-title">Ajouter une voiture</h2>
+        <button class="btn-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-fields">
+        <div>
+          <label>Marque *</label>
+          <input id="form-marque" type="text" class="admin-input" placeholder="ex: Porsche" />
+        </div>
+        <div>
+          <label>Modèle *</label>
+          <input id="form-modele" type="text" class="admin-input" placeholder="ex: 911 Carrera" />
+        </div>
+        <div class="grid-2">
+          <div>
+            <label>Année *</label>
+            <input id="form-annee" type="number" class="admin-input" placeholder="2023" min="1990" max="2030" />
+          </div>
+          <div>
+            <label>Prix/jour (€) *</label>
+            <input id="form-prix" type="number" class="admin-input" placeholder="250" min="1" />
+          </div>
+        </div>
+        <div>
+          <label>URL Image</label>
+          <input id="form-image" type="text" class="admin-input" placeholder="https://..." />
+        </div>
+        <div class="checkbox-row">
+          <input id="form-dispo" type="checkbox" checked />
+          <label for="form-dispo">Disponible à la location</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-annuler" onclick="closeModal()">Annuler</button>
+        <button class="btn-enregistrer" onclick="saveVoiture()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin-voitures.js"></script>
+</body>
+</html>
