@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 24px;
+    padding: 110px 24px 40px;
     position: relative;
     overflow: hidden;
 }
@@ -389,9 +389,24 @@
         gap: 12px;
     }
 }
-.login-message.info {
+
+
+/* ── Navbar fix ─────────────────────────────────────────────────── */
+.nav-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 48px;
+}
+
+.nav-inner .nav-links {
+    justify-content: center;
+}
+
+.nav-inner .nav-actions {
+    justify-content: flex-end;
     display: flex;
-    background: rgba(59, 130, 246, 0.08);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    color: #93c5fd;
 }
