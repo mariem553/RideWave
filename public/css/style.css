@@ -15,7 +15,9 @@
     --accent-dark:  #8b7340;
     --accent-hover: #f0c96a;
     --border:       rgba(201, 169, 98, 0.18);
+    --border-dim:   rgba(201, 169, 98, 0.12);
     --glow:         rgba(201, 169, 98, 0.25);
+    --ease:         cubic-bezier(0.4, 0, 0.2, 1);
     --radius-sm:    8px;
     --radius-md:    14px;
     --radius-lg:    24px;

@@ -11,7 +11,7 @@ const VEHICLES = [
         id: 1,
         name: 'Porsche 911 Turbo S',
         category: 'Sport',
-        price: 580,
+        price: 1950,
         image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80',
         description: 'The pinnacle of Porsche engineering. An icon refined across generations, delivering breathtaking performance with everyday usability.',
         specs: { power: '650', speed: '330', acceleration: '2.7s' }
@@ -20,7 +20,7 @@ const VEHICLES = [
         id: 2,
         name: 'Bentley Continental GT',
         category: 'Grand Tourer',
-        price: 450,
+        price: 1500,
         image: 'https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=800&q=80',
         description: 'The grand tourer reimagined. Where hand-crafted British luxury meets supercar performance across the most demanding roads.',
         specs: { power: '635', speed: '333', acceleration: '3.6s' }
@@ -29,7 +29,7 @@ const VEHICLES = [
         id: 3,
         name: 'Lamborghini Huracán',
         category: 'Supercar',
-        price: 690,
+        price: 2350,
         image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80',
         description: "Pure Italian ferocity. The Huracán distills decades of Sant'Agata excellence into a visceral, unforgettable driving experience.",
         specs: { power: '640', speed: '325', acceleration: '2.9s' }
@@ -38,7 +38,7 @@ const VEHICLES = [
         id: 4,
         name: 'Rolls-Royce Ghost',
         category: 'Luxury',
-        price: 750,
+        price: 2545,
         image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80',
         description: 'The most serene vehicle ever crafted. An effortless sanctuary of Starlight headliner, whisper-quiet refinement and unbounded presence.',
         specs: { power: '563', speed: '250', acceleration: '4.8s' }
@@ -47,7 +47,7 @@ const VEHICLES = [
         id: 5,
         name: 'Ferrari F8 Tributo',
         category: 'Supercar',
-        price: 820,
+        price: 2800,
         image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&q=80',
         description: 'A tribute to the most powerful V8 in Ferrari history. Aerodynamic perfection, track-bred dynamics and prancing horse heritage.',
         specs: { power: '720', speed: '340', acceleration: '2.9s' }
@@ -56,7 +56,7 @@ const VEHICLES = [
         id: 6,
         name: 'Mercedes-Maybach S',
         category: 'Berline',
-        price: 380,
+        price: 1300,
         image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
         description: 'The ultimate expression of automotive luxury. First-class rear accommodation, Burmester 4D surround sound and sculpted Teutonic elegance.',
         specs: { power: '496', speed: '250', acceleration: '4.5s' }
@@ -100,7 +100,7 @@ function renderVehicles(data) {
                     <div class="vehicle-img-wrap">
                         <img src="${v.image}" alt="${v.name}" class="vehicle-img" loading="lazy">
                         <div class="vehicle-price-badge">
-                            ${v.price}€<span class="price-unit">/jour</span>
+                            ${v.price}DT<span class="price-unit">/jour</span>
                         </div>
                         <div class="vehicle-category-badge">${v.category}</div>
                     </div>
@@ -143,7 +143,7 @@ function renderVehicles(data) {
 
                     <div class="back-card-footer">
                         <div class="back-price-display">
-                            <span class="back-price-value">${v.price}€</span>
+                            <span class="back-price-value">${v.price}DT</span>
                             <span class="back-price-unit">par jour</span>
                         </div>
                         <button class="back-book-btn" onclick="handleBooking(${v.id})">
@@ -250,6 +250,23 @@ function setupBookingForm() {
         const btn  = form.querySelector('.btn-luxury');
         const orig = btn.innerHTML;
 
+        const location    = document.getElementById('location').value;
+        const vehicleType = document.getElementById('vehicle-model').value;
+        const startDate   = document.getElementById('start-date').value;
+        const endDate     = document.getElementById('end-date').value;
+
+        // Validation — identifier les champs vides
+        const missingFields = [];
+        if (!location) missingFields.push('Lieu de départ');
+        if (!vehicleType) missingFields.push('Type de véhicule');
+        if (!startDate) missingFields.push('Date de départ');
+        if (!endDate) missingFields.push('Date de retour');
+
+        if (missingFields.length > 0) {
+            showValidationErrorAlt(missingFields);
+            return;
+        }
+
         btn.innerHTML = '<span class="btn-inner">Recherche en cours...</span>';
         btn.disabled = true;
         btn.style.opacity = '0.7';
@@ -264,10 +281,18 @@ function setupBookingForm() {
                 Résultats trouvés !
             </span>`;
 
-        await delay(2000);
-        btn.innerHTML = orig;
-        btn.disabled = false;
-        btn.style.opacity = '';
+        await delay(1500);
+
+        // Créer les URL params
+        const params = new URLSearchParams({
+            location: location,
+            type: vehicleType,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        // Naviguer vers voiture.html avec les paramètres
+        window.location.href = `/views/voiture.html?${params.toString()}`;
     });
 }
 
@@ -397,6 +422,89 @@ function setupCursor() {
    ══════════════════════════════════════════════════════════════ */
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/* ─── Alternative: Validation Minimale (Version 2) ────────────── */
+function showValidationErrorAlt(fields) {
+    let existing = document.getElementById('validation-toast-alt');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'validation-toast-alt';
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 520px;
+        width: calc(100% - 48px);
+        background: rgba(7, 7, 9, 0.92);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(201, 169, 98, 0.25);
+        border-radius: 14px;
+        padding: 16px 20px;
+        color: #f5f3ee;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        line-height: 1.6;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 9998;
+    `;
+
+    const content = document.createElement('div');
+    content.style.cssText = 'display: flex; align-items: flex-start; gap: 12px;';
+    
+    const icon = document.createElement('div');
+    icon.style.cssText = 'flex-shrink: 0; margin-top: 2px;';
+    icon.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#daa520" stroke-width="2.5">
+            <path d="M12 2L2 20h20L12 2z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+    `;
+
+    const text = document.createElement('div');
+    text.innerHTML = `
+        <div style="font-weight: 600; margin-bottom: 6px; color: #daa520;">Champs manquants</div>
+        <div style="opacity: 0.85;">${fields.map(f => `${f}`).join(' • ')}</div>
+    `;
+
+    content.appendChild(icon);
+    content.appendChild(text);
+    toast.appendChild(content);
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'fadeOutDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+/* ─── Injection des styles d'animation (une seule fois) ──────── */
+if (!document.getElementById('validation-toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'validation-toast-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(420px) translateY(-12px); }
+            to   { opacity: 1; transform: translateX(0) translateY(0); }
+        }
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0) translateY(0); }
+            to   { opacity: 0; transform: translateX(420px) translateY(-12px); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(24px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes fadeOutDown {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to   { opacity: 0; transform: translateX(-50%) translateY(24px); }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 /* ══════════════════════════════════════════════════════════════

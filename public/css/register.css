@@ -1,0 +1,453 @@
+/* ═══════════════════════════════════════════════════════════════
+   register.css — Page Inscription
+   Responsable : Oumayma
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Layout page ────────────────────────────────────────────── */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ─── Fond ambient ───────────────────────────────────────────── */
+.register-bg-glow-1 {
+    position: absolute;
+    top: -30%;
+    left: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(201,169,98,0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.register-bg-glow-2 {
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(201,169,98,0.04) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.register-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(201,169,98,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,98,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+/* ─── Carte principale ───────────────────────────────────────── */
+.register-card {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+    background: rgba(12, 12, 16, 0.9);
+    border: 1px solid rgba(201, 169, 98, 0.14);
+    border-radius: 28px;
+    padding: 52px;
+    box-shadow:
+        0 60px 120px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(201, 169, 98, 0.15);
+}
+
+.register-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 60px;
+    right: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.5), transparent);
+    border-radius: 1px;
+}
+
+/* ─── Logo ───────────────────────────────────────────────────── */
+.register-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.register-logo-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c9a962, #8b7340);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.register-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: 0.04em;
+}
+
+.register-logo-text .wave {
+    font-style: italic;
+    background: linear-gradient(90deg, #c9a962, #e8d5a3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ─── Heading ────────────────────────────────────────────────── */
+.register-heading {
+    margin-bottom: 36px;
+}
+
+.register-heading h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--fg);
+    line-height: 1.1;
+    margin: 0 0 10px;
+}
+
+.register-heading p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ─── Message erreur / succès (même style que login) ────────── */
+.login-message {
+    display: none;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.login-message.error {
+    display: flex;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.login-message.success {
+    display: flex;
+    background: rgba(13, 148, 136, 0.08);
+    border: 1px solid rgba(13, 148, 136, 0.2);
+    color: #5eead4;
+}
+
+.login-message.info {
+    display: flex;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+/* ─── Formulaire ─────────────────────────────────────────────── */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Champ input */
+.register-field {
+    position: relative;
+}
+
+.register-field input {
+    width: 100%;
+    padding: 18px 20px 18px 50px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: var(--fg);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.register-field input::placeholder {
+    color: var(--muted);
+}
+
+.register-field input:focus {
+    border-color: var(--accent);
+    background: rgba(201, 169, 98, 0.05);
+    box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.08);
+}
+
+.register-field input.input-error {
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.register-field input.input-success {
+    border-color: rgba(13, 148, 136, 0.5);
+}
+
+/* Icône à gauche */
+.register-field-icon {
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    transition: color 0.3s ease;
+    z-index: 1;
+}
+
+.register-field:focus-within .register-field-icon {
+    color: var(--accent);
+}
+
+/* Bouton oeil */
+.register-eye-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.register-eye-btn:hover {
+    color: var(--accent);
+}
+
+/* ─── Hint sous les champs ───────────────────────────────────── */
+.register-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    padding-left: 4px;
+    display: none;
+}
+
+.register-hint.visible { display: block; }
+.register-hint.error   { color: #ef4444; }
+.register-hint.success { color: #0d9488; }
+
+/* ─── Barre force mot de passe ───────────────────────────────── */
+.register-strength {
+    margin-top: 8px;
+    display: none;
+}
+
+.register-strength-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.register-strength-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 0.3s ease;
+}
+
+.register-strength-seg.weak   { background: #ef4444; }
+.register-strength-seg.medium { background: #f59e0b; }
+.register-strength-seg.strong { background: #0d9488; }
+
+.register-strength-text {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* ─── CGU Checkbox ───────────────────────────────────────────── */
+.register-cgu {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    margin-top: 4px;
+}
+
+.register-cgu input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.register-cgu label {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    cursor: pointer;
+}
+
+.register-cgu label a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.register-cgu label a:hover {
+    color: var(--accent-hover);
+}
+
+/* ─── Bouton submit ──────────────────────────────────────────── */
+.register-btn {
+    width: 100%;
+    padding: 18px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    border: none;
+    border-radius: 14px;
+    color: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-hover), #f5b940);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(201, 169, 98, 0.35);
+}
+
+.register-btn:hover::before { opacity: 1; }
+
+.register-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.register-btn-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Spinner */
+.register-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(7, 7, 9, 0.3);
+    border-top-color: #070709;
+    border-radius: 50%;
+    animation: registerSpin 0.8s linear infinite;
+    display: none;
+    margin: auto;
+}
+
+@keyframes registerSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Lien login ─────────────────────────────────────────────── */
+.register-login-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 24px;
+}
+
+.register-login-link a {
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 4px;
+    transition: color 0.3s ease;
+}
+
+.register-login-link a:hover {
+    color: var(--accent-hover);
+}
+
+/* ─── Dev credentials ────────────────────────────────────────── */
+.dev-credentials {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: rgba(245, 158, 11, 0.06);
+    border: 1px solid rgba(245, 158, 11, 0.18);
+    border-radius: 12px;
+}
+
+.dev-credentials-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #f59e0b;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.dev-credentials-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.dev-credentials-item:last-child { border: none; }
+.dev-credentials-item:hover { color: var(--fg); }
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 540px) {
+    .register-card {
+        padding: 36px 24px;
+    }
+
+    .register-heading h1 {
+        font-size: 1.7rem;
+    }
+}
