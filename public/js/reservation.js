@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════════════════════════
    reservation.js — Page Réservation
    Données fictives pour les voitures
    ═══════════════════════════════════════════════════════════════ */
@@ -191,8 +191,9 @@ function confirmReservation() {
   const lastName = document.getElementById("client-last-name")?.value.trim();
   const email = document.getElementById("client-email")?.value.trim();
   const phone = document.getElementById("client-phone")?.value.trim();
+  const license = document.getElementById("client-license")?.value.trim();
 
-  if (!firstName || !lastName || !email || !phone) {
+  if (!firstName || !lastName || !email || !phone || !license) {
     if (confirmMsg) {
       confirmMsg.style.display = "block";
       confirmMsg.style.background = "rgba(239, 68, 68, 0.1)";
@@ -227,6 +228,18 @@ function confirmReservation() {
     return;
   }
 
+  const licenseRegex = /^[A-Za-z0-9\-/]{4,20}$/;
+  if (!licenseRegex.test(license)) {
+    if (confirmMsg) {
+      confirmMsg.style.display = "block";
+      confirmMsg.style.background = "rgba(239, 68, 68, 0.1)";
+      confirmMsg.style.border = "1px solid rgba(239, 68, 68, 0.3)";
+      confirmMsg.style.color = "#fca5a5";
+      confirmMsg.textContent = "Veuillez entrer un numéro de permis de conduire valide.";
+    }
+    return;
+  }
+
   const startDate = startInput?.value;
   const endDate = endInput?.value;
   const days = calculateDays(startDate, endDate);
@@ -253,6 +266,7 @@ function confirmReservation() {
     Client: ${firstName} ${lastName}
     E-mail: ${email}
     Téléphone: ${phone}
+    Permis de conduire: ${license}
     Du ${formatDate(startDate)} au ${formatDate(endDate)} (${days} jour${days > 1 ? 's' : ''})
     Total: ${total} DT ${hasDriver ? '(avec chauffeur)' : ''}
   `.trim();
