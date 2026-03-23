@@ -32,6 +32,8 @@ app.get("/api/health", (req, res) => {
 
 // Pages admin
 app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "admin", "voitures.html"));
+
   res.sendFile(path.join(__dirname, "views","login.html"));
 });
 app.get("/admin/:page", (req, res) => {
