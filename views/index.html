@@ -19,6 +19,15 @@
 
     <!-- CSS SPÉCIFIQUE à la home — index.css (Yasmine) -->
     <link rel="stylesheet" href="/css/index.css">
+
+    <!-- Animation pour modale vidéo -->
+    <style>
+      @keyframes modalFadeIn {
+        from { opacity: 0; transform: scale(0.94) translateY(16px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      #story-modal.open { display: flex !important; }
+    </style>
 </head>
 <body>
 
@@ -56,7 +65,7 @@
             <div class="nav-actions">
                 <a href="/views/login.html" class="nav-signin" id="nav-signin-link">Connexion</a>
                 <a href="/views/profile.html" class="nav-signin" id="nav-profile-link" style="display:none;">Mon Profil</a>
-                <a href="/views/reservation.html" class="btn-reserve"><span>Réserver</span></a>
+                <a href="/views/voiture.html" class="btn-reserve"><span>Réserver</span></a>
                 <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
                     <span></span><span></span><span></span>
                 </button>
@@ -70,7 +79,7 @@
         <a href="#services" class="nav-link">Services</a>
         <a href="#about" class="nav-link">À propos</a>
         <a href="#contact-section" class="nav-link">Contact</a>
-        <a href="/views/login.html" class="btn-reserve" style="margin-top:16px;"><span>Connexion</span></a>
+        <a href="/views/voiture.html" class="btn-reserve" style="margin-top:16px;"><span>Réserver</span></a>
     </div>
 
     <!-- ══════════════════════════════════════════════════
@@ -698,6 +707,124 @@
 
     <!-- JS SPÉCIFIQUE à la home — index.js (Yasmine) -->
     <script src="/js/index.js"></script>
+
+    <!-- ══════════════════════════════════════════════════
+         MODALE VIDÉO — "Notre histoire"
+    ══════════════════════════════════════════════════ -->
+    <div id="story-modal" aria-modal="true" role="dialog" aria-label="Notre histoire" style="
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(7, 7, 9, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    ">
+      <div style="
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,98,0.2);
+        background: #000;
+        animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      ">
+        <!-- Bouton fermer -->
+        <button id="story-modal-close" aria-label="Fermer" style="
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          z-index: 10;
+          background: rgba(7,7,9,0.75);
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #fff;
+          transition: background 0.2s, transform 0.2s;
+        " onmouseover="this.style.background='rgba(201,169,98,0.3)';this.style.transform='scale(1.1)'"
+           onmouseout="this.style.background='rgba(7,7,9,0.75)';this.style.transform='scale(1)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+
+        <!-- Bandeau décoratif titre -->
+        <div style="
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 40px 28px 20px;
+          background: linear-gradient(to top, rgba(7,7,9,0.85) 0%, transparent 100%);
+          z-index: 5;
+          pointer-events: none;
+        ">
+          <p style="color:rgba(201,169,98,0.85);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 4px;">RideWave</p>
+          <p style="color:#f5f3ee;font-size:15px;font-weight:500;margin:0;opacity:0.85;">Notre histoire</p>
+        </div>
+
+        <!-- Vidéo -->
+        <video
+          id="story-video"
+          style="width:100%;display:block;max-height:80vh;object-fit:contain;background:#000;"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source src="/video/notre-histoire.mp4" type="video/mp4">
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+      </div>
+    </div>
+
+    <!-- Script gestion modale -->
+    <script>
+      (function () {
+        const modal      = document.getElementById('story-modal');
+        const video      = document.getElementById('story-video');
+        const closeBtn   = document.getElementById('story-modal-close');
+        const playBtn    = document.querySelector('.hero-play-btn');   // bouton "Notre histoire"
+
+        function openModal() {
+          modal.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          video.currentTime = 0;
+          video.play().catch(() => {});   // autoplay si autorisé par le navigateur
+        }
+
+        function closeModal() {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+          video.pause();
+        }
+
+        // Clic sur "Notre histoire"
+        if (playBtn) playBtn.addEventListener('click', openModal);
+
+        // Fermer via le bouton ✕
+        closeBtn.addEventListener('click', closeModal);
+
+        // Fermer en cliquant sur le fond sombre
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) closeModal();
+        });
+
+        // Fermer avec Escape
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+      })();
+    </script>
 
 </body>
 </html>
