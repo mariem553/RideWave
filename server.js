@@ -32,11 +32,9 @@ app.get("/api/health", (req, res) => {
 
 // Pages admin
 app.get("/admin", (req, res) => {
-<<<<<<< HEAD
   res.sendFile(path.join(__dirname, "views", "admin", "voitures.html"));
-=======
+
   res.sendFile(path.join(__dirname, "views","login.html"));
->>>>>>> 861e3ae4cfadc55a9b47f9a343d8573f8bc98a28
 });
 app.get("/admin/:page", (req, res) => {
   const page = req.params.page;
