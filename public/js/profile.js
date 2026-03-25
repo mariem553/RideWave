@@ -12,47 +12,6 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
 if (!token || !user) {
   window.location.href = "/views/login.html";
 }
-
-/* --- Donnees statiques Phase 1 -------------------------------- */
-const FAKE_RESERVATIONS = [
-  {
-    id: 1,
-    voiture_id: 1,
-    marque: "Toyota",
-    modele: "Corolla",
-    image_url:
-      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&q=80",
-    date_debut: "2026-04-10",
-    date_fin: "2026-04-13",
-    total_prix: 300.0,
-    statut: "confirmee",
-  },
-  {
-    id: 2,
-    voiture_id: 3,
-    marque: "Volkswagen",
-    modele: "Golf",
-    image_url:
-      "https://images.unsplash.com/photo-1471444928139-48c5bf5173f8?w=400&q=80",
-    date_debut: "2026-05-01",
-    date_fin: "2026-05-03",
-    total_prix: 240.0,
-    statut: "confirmee",
-  },
-  {
-    id: 3,
-    voiture_id: 2,
-    marque: "Renault",
-    modele: "Clio",
-    image_url:
-      "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=80",
-    date_debut: "2026-02-05",
-    date_fin: "2026-02-07",
-    total_prix: 180.0,
-    statut: "annulee",
-  },
-];
-
 /* --- Variables globales --------------------------------------- */
 let allReservations = [];
 let currentFilter = "all";
@@ -128,15 +87,7 @@ function updateStats(data) {
 /* ===============================================================
    CHARGEMENT RESERVATIONS
    =============================================================== */
-function loadReservations() {
-  /* PHASE 1 */
-  setTimeout(() => {
-    allReservations = FAKE_RESERVATIONS;
-    updateStats(allReservations);
-    renderReservations(allReservations);
-  }, 700);
-
-  /* PHASE 2 :
+async function loadReservations() {
   try {
     const res  = await fetch("/api/reservations/mes-reservations", {
       headers: { "Authorization": "Bearer " + token }
@@ -149,7 +100,6 @@ function loadReservations() {
   } catch (err) {
     console.error("Erreur chargement reservations:", err);
   }
-  */
 }
 
 /* ===============================================================
@@ -276,20 +226,9 @@ function initModal() {
   }
 
   if (confirmBtn) {
-    confirmBtn.addEventListener("click", () => {
+    confirmBtn.addEventListener("click", async () => {
       document.getElementById("cancel-modal").classList.remove("open");
       if (!pendingCancelId) return;
-
-      /* PHASE 1 — mise a jour locale */
-      allReservations = allReservations.map((r) =>
-        r.id === pendingCancelId ? { ...r, statut: "annulee" } : r
-      );
-      updateStats(allReservations);
-      renderReservations(allReservations);
-      showToast("Reservation annulee avec succes.", "success");
-      pendingCancelId = null;
-
-      /* PHASE 2 :
       try {
         const res = await fetch(`/api/reservations/${pendingCancelId}/annuler`, {
           method: "PATCH",
@@ -301,7 +240,6 @@ function initModal() {
         renderReservations(allReservations);
         showToast("Reservation annulee.", "success");
       } catch (err) { showToast("Erreur serveur.", "error"); }
-      */
     });
   }
 }
