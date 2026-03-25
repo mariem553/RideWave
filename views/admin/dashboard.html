@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RideWave — Dashboard Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/css/admin.css"/>
 </head>
 <body>
@@ -24,102 +25,107 @@
   <span class="loader-text">Chargement…</span>
 </div>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar-left">
-    <button class="mobile-toggle" id="mobileToggle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </button>
-    <div>
-      <div class="topbar-crumb">Admin · RideWave</div>
-      <div class="topbar-title">Vue d'ensemble</div>
+<div class="admin-wrap">
+
+  <!-- SIDEBAR (injectée par JS) -->
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="sb-overlay" id="sbOverlay"></div>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-toggle" id="mobileToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div>
+          <div class="topbar-crumb">Admin · RideWave</div>
+          <div class="topbar-title">Vue d'ensemble</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="tDate"></span>
+        <button class="topbar-btn" id="btnRefresh" title="Actualiser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="topbar-right">
-    <span class="topbar-date" id="tDate"></span>
-    <button class="topbar-btn" id="btnRefresh" title="Actualiser">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="23 4 23 10 17 10"/>
-        <polyline points="1 20 1 14 7 14"/>
-        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-      </svg>
-    </button>
-  </div>
+
+    <!-- CONTENU -->
+    <div class="content">
+
+      <!-- KPI -->
+      <section>
+        <div class="s-hd">
+          <div>
+            <span class="s-tag">Statistiques</span>
+            <div class="s-title">Indicateurs clés</div>
+          </div>
+          <a href="/views/admin/reservations.html" class="s-link">
+            Tout voir
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+      </section>
+
+      <!-- TABLE dernières réservations -->
+      <section>
+        <div class="s-hd">
+          <div>
+            <span class="s-tag">Activité récente</span>
+            <div class="s-title">Dernières réservations</div>
+          </div>
+          <a href="/views/admin/reservations.html" class="s-link">
+            Voir tout
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+        <div class="table-card">
+          <div class="tc-header">
+            <span class="tc-title">Réservations récentes</span>
+            <span class="tc-count" id="tcCount"></span>
+          </div>
+          <div class="table-wrap">
+            <table class="rw-table">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Voiture</th>
+                  <th>Dates</th>
+                  <th>Statut</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+          <div class="table-footer" id="tableFooter"></div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+
+    <!-- MODAL DÉTAIL RÉSERVATION -->
+    <div class="detail-overlay" id="detailOverlay">
+      <div class="detail-modal"></div>
+    </div>
+
+  </main>
 </div>
 
-<!-- CONTENU -->
-<div class="content">
-
-  <!-- KPI -->
-  <section>
-    <div class="s-hd">
-      <div>
-        <span class="s-tag">Statistiques</span>
-        <div class="s-title">Indicateurs clés</div>
-      </div>
-      <a href="reservations.html" class="s-link">
-        Tout voir
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
-        </svg>
-      </a>
-    </div>
-    <div class="kpi-grid" id="kpiGrid"></div>
-  </section>
-
-  <!-- TABLE -->
-  <section>
-    <div class="s-hd">
-      <div>
-        <span class="s-tag">Activité récente</span>
-        <div class="s-title">Dernières réservations</div>
-      </div>
-      <a href="reservations.html" class="s-link">
-        Voir tout
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
-        </svg>
-      </a>
-    </div>
-    <div class="table-card">
-      <div class="tc-header">
-        <span class="tc-title">Réservations récentes</span>
-        <span class="tc-count" id="tcCount"></span>
-      </div>
-      <div class="table-wrap">
-        <table class="rw-table">
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Voiture</th>
-              <th>Dates</th>
-              <th>Statut</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-      <div class="table-footer" id="tableFooter"></div>
-    </div>
-  </section>
-
-</div>
-
-<!-- ════════════════════════════════════════
-     MODAL DÉTAIL RÉSERVATION
-     Overlay transparent + carte centrale
-════════════════════════════════════════ -->
-<div class="detail-overlay" id="detailOverlay">
-  <div class="detail-modal"></div>
-</div>
-
+<script src="/js/admin-sidebar.js"></script>
 <script src="/js/admin-dashboard.js"></script>
 </body>
 </html>
