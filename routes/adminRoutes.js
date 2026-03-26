@@ -3,20 +3,22 @@
    Chemin : routes/adminRoutes.js
    ═══════════════════════════════════════════════════════════ */
 
-const express = require("express");
-const router  = express.Router();
-const db      = require("../config/db");
+const express         = require("express");
+const router          = express.Router();
+const db              = require("../config/db");
+const { verifyAdmin } = require("../middleware/auth");
 
 /* ════════════════════════════════════════
    GET /api/admin/stats
+   Route protégée verifyAdmin
    Retourne :
-   - totalVoitures          (nb total voitures)
-   - voituresDisponibles    (disponible = 1)
-   - reservationsConfirmees (statut = 'confirmee')
-   - reservationsAnnulees   (statut = 'annulee')
-   - dernieresReservations  (4 dernières)
+   - totalVoitures
+   - voituresDisponibles
+   - reservationsConfirmees
+   - reservationsAnnulees
+   - dernieresReservations (5 dernières)
 ════════════════════════════════════════ */
-router.get("/stats", async (req, res) => {
+router.get("/stats", verifyAdmin, async (req, res) => {
   try {
 
     /* 1. Total voitures */
@@ -39,22 +41,23 @@ router.get("/stats", async (req, res) => {
       `SELECT COUNT(*) AS reservationsAnnulees FROM reservations WHERE statut = 'annulee'`
     );
 
-    /* 5. Les 4 dernières réservations avec nom client + voiture */
+    /* 5. Les 5 dernières réservations */
     const [dernieresReservations] = await db.query(
       `SELECT
          r.id,
-         u.nom           AS client,
-         CONCAT(v.marque, ' ', v.modele) AS voiture,
-         r.date_debut    AS dateDebut,
-         r.date_fin      AS dateFin,
-         r.total_prix    AS totalPrix,
+         u.nom        AS client,
+         v.marque,
+         v.modele,
+         r.date_debut AS dateDebut,
+         r.date_fin   AS dateFin,
+         r.total_prix AS totalPrix,
          r.statut,
-         r.created_at    AS createdAt
+         r.created_at AS createdAt
        FROM reservations r
        JOIN users    u ON r.user_id    = u.id
        JOIN voitures v ON r.voiture_id = v.id
        ORDER BY r.created_at DESC
-       LIMIT 4`
+       LIMIT 5`
     );
 
     res.json({
@@ -73,38 +76,46 @@ router.get("/stats", async (req, res) => {
 
 /* ════════════════════════════════════════
    GET /api/admin/reservations
-   Retourne toutes les réservations
-   avec nom client + détail voiture
-   Paramètres optionnels :
+   Route protégée verifyAdmin
+   Query params optionnels :
    ?statut=confirmee|annulee
+   ?date=YYYY-MM-DD
    ?limit=20&offset=0
 ════════════════════════════════════════ */
-router.get("/reservations", async (req, res) => {
+router.get("/reservations", verifyAdmin, async (req, res) => {
   try {
-    const { statut, limit = 20, offset = 0 } = req.query;
+    const { statut, date, limit = 20, offset = 0 } = req.query;
 
-    let where = "";
-    const params = [];
+    const conditions = [];
+    const params     = [];
 
     if (statut) {
-      where = "WHERE r.statut = ?";
+      conditions.push(`r.statut = ?`);
       params.push(statut);
     }
+
+    if (date) {
+      conditions.push(`r.date_debut = ?`);
+      params.push(date);
+    }
+
+    const where = conditions.length
+      ? `WHERE ${conditions.join(" AND ")}`
+      : "";
 
     const [reservations] = await db.query(
       `SELECT
          r.id,
-         u.nom           AS client,
-         u.email         AS clientEmail,
-         CONCAT(v.marque, ' ', v.modele) AS voiture,
+         u.nom        AS client,
+         u.email      AS clientEmail,
          v.marque,
          v.modele,
-         v.prix_jour     AS prixJour,
-         r.date_debut    AS dateDebut,
-         r.date_fin      AS dateFin,
-         r.total_prix    AS totalPrix,
+         v.prix_jour  AS prixJour,
+         r.date_debut AS dateDebut,
+         r.date_fin   AS dateFin,
+         r.total_prix AS totalPrix,
          r.statut,
-         r.created_at    AS createdAt
+         r.created_at AS createdAt
        FROM reservations r
        JOIN users    u ON r.user_id    = u.id
        JOIN voitures v ON r.voiture_id = v.id
