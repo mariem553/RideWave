@@ -5,22 +5,22 @@
 
 const API_RESERVATIONS = '/api/admin/reservations';
 const API_ANNULER      = '/api/reservations';
-const USE_MOCK         = true; // Phase 1
+const USE_MOCK         = true;
 const PER_PAGE         = 10;
 
 const MOCK_DATA = [
-  { id:1,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Toyota Corolla',  dateDebut:'2026-03-10', dateFin:'2026-03-13', totalPrix:255.00, statut:'confirmee' },
-  { id:2,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Volkswagen Golf', dateDebut:'2026-03-05', dateFin:'2026-03-07', totalPrix:190.00, statut:'annulee'   },
-  { id:3,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Renault Clio',    dateDebut:'2026-04-01', dateFin:'2026-04-05', totalPrix:260.00, statut:'confirmee' },
-  { id:4,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Peugeot 308',     dateDebut:'2026-04-10', dateFin:'2026-04-14', totalPrix:440.00, statut:'confirmee' },
-  { id:5,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Dacia Sandero',   dateDebut:'2026-04-20', dateFin:'2026-04-22', totalPrix:110.00, statut:'annulee'   },
-  { id:6,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Toyota Corolla',  dateDebut:'2026-05-01', dateFin:'2026-05-04', totalPrix:255.00, statut:'confirmee' },
-  { id:7,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Volkswagen Golf', dateDebut:'2026-05-10', dateFin:'2026-05-13', totalPrix:285.00, statut:'confirmee' },
-  { id:8,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Renault Clio',    dateDebut:'2026-05-20', dateFin:'2026-05-22', totalPrix:130.00, statut:'annulee'   },
-  { id:9,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Peugeot 308',     dateDebut:'2026-06-01', dateFin:'2026-06-06', totalPrix:550.00, statut:'confirmee' },
-  { id:10, client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Dacia Sandero',   dateDebut:'2026-06-10', dateFin:'2026-06-12', totalPrix:110.00, statut:'confirmee' },
-  { id:11, client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', voiture:'Toyota Corolla',  dateDebut:'2026-06-20', dateFin:'2026-06-23', totalPrix:255.00, statut:'annulee'   },
-  { id:12, client:'Sana Trabelsi', clientEmail:'sana@email.com',  voiture:'Volkswagen Golf', dateDebut:'2026-07-01', dateFin:'2026-07-05', totalPrix:380.00, statut:'confirmee' },
+  { id:1,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Toyota',     modele:'Corolla', dateDebut:'2026-03-10', dateFin:'2026-03-13', totalPrix:255.00, statut:'confirmee' },
+  { id:2,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-03-05', dateFin:'2026-03-07', totalPrix:190.00, statut:'annulee'   },
+  { id:3,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Renault',    modele:'Clio',    dateDebut:'2026-04-01', dateFin:'2026-04-05', totalPrix:260.00, statut:'confirmee' },
+  { id:4,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Peugeot',    modele:'308',     dateDebut:'2026-04-10', dateFin:'2026-04-14', totalPrix:440.00, statut:'confirmee' },
+  { id:5,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Dacia',      modele:'Sandero', dateDebut:'2026-04-20', dateFin:'2026-04-22', totalPrix:110.00, statut:'annulee'   },
+  { id:6,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-05-01', dateFin:'2026-05-04', totalPrix:255.00, statut:'confirmee' },
+  { id:7,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-05-10', dateFin:'2026-05-13', totalPrix:285.00, statut:'confirmee' },
+  { id:8,  client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Renault',    modele:'Clio',    dateDebut:'2026-05-20', dateFin:'2026-05-22', totalPrix:130.00, statut:'annulee'   },
+  { id:9,  client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Peugeot',    modele:'308',     dateDebut:'2026-06-01', dateFin:'2026-06-06', totalPrix:550.00, statut:'confirmee' },
+  { id:10, client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Dacia',      modele:'Sandero', dateDebut:'2026-06-10', dateFin:'2026-06-12', totalPrix:110.00, statut:'confirmee' },
+  { id:11, client:'Ahmed Ben Ali', clientEmail:'ahmed@email.com', marque:'Toyota',     modele:'Corolla', dateDebut:'2026-06-20', dateFin:'2026-06-23', totalPrix:255.00, statut:'annulee'   },
+  { id:12, client:'Sana Trabelsi', clientEmail:'sana@email.com',  marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-07-01', dateFin:'2026-07-05', totalPrix:380.00, statut:'confirmee' },
 ];
 
 /* ── State ── */
@@ -63,13 +63,16 @@ async function patchAnnuler(id) {
 /* ════════════════════════════
    HELPERS
 ════════════════════════════ */
-const esc      = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const fmtDate  = s => { if(!s) return '—'; const d=new Date(s); return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`; };
-const duree    = (d1,d2) => { if(!d1||!d2) return '—'; const n=Math.round((new Date(d2)-new Date(d1))/86400000); return n>0?`${n} nuit${n>1?'s':''}`:' —'; };
-const fmtPrix  = n => `${Number(n).toFixed(2)} TND`;
-const initials = n => n.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
-const bCls     = s => s==='confirmee'?'b-ok':'b-ko';
-const bLbl     = s => s==='confirmee'?'Confirmée':'Annulée';
+const esc        = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmtDate    = s => { if(!s) return '—'; const d=new Date(s); return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`; };
+const duree      = (d1,d2) => { if(!d1||!d2) return '—'; const n=Math.round((new Date(d2)-new Date(d1))/86400000); return n>0?`${n} nuit${n>1?'s':''}`:' —'; };
+const fmtPrix    = n => `${Number(n).toFixed(2)} TND`;
+const initials   = n => n.split(' ').map(x=>x[0]).join('').substring(0,2).toUpperCase();
+const bCls       = s => s==='confirmee'?'b-ok':'b-ko';
+const bLbl       = s => s==='confirmee'?'Confirmée':'Annulée';
+
+/* ── Construit le nom voiture depuis marque + modele ── */
+const nomVoiture = r => esc((r.marque || '') + ' ' + (r.modele || ''));
 
 /* ════════════════════════════
    FILTRAGE
@@ -81,7 +84,11 @@ function applyFilters() {
   const dateTo   = document.getElementById('dateTo')?.value   || '';
 
   filteredData = allData.filter(r => {
-    const matchSearch = !search || r.client.toLowerCase().includes(search) || r.voiture.toLowerCase().includes(search) || String(r.id).includes(search);
+    const voiture     = (r.marque + ' ' + r.modele).toLowerCase();
+    const matchSearch = !search ||
+      r.client.toLowerCase().includes(search) ||
+      voiture.includes(search) ||
+      String(r.id).includes(search);
     const matchStatut = !statut || r.statut === statut;
     const matchFrom   = !dateFrom || r.dateDebut >= dateFrom;
     const matchTo     = !dateTo   || r.dateDebut <= dateTo;
@@ -110,7 +117,11 @@ function renderTable() {
 
   if (!total) {
     tbody.innerHTML = `<tr><td colspan="9"><div class="no-results">
-      <div class="no-results-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="no-results-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
       <div class="no-results-text">Aucune réservation trouvée</div>
       <div class="no-results-sub">Essayez de modifier vos filtres</div>
     </div></td></tr>`;
@@ -129,7 +140,7 @@ function renderTable() {
           </div>
         </div>
       </td>
-      <td class="td-car">${esc(r.voiture)}</td>
+      <td class="td-car">${nomVoiture(r)}</td>
       <td class="td-date">${fmtDate(r.dateDebut)}</td>
       <td class="td-date">${fmtDate(r.dateFin)}</td>
       <td class="td-duree">${duree(r.dateDebut,r.dateFin)}</td>
@@ -139,7 +150,9 @@ function renderTable() {
         ${r.statut==='confirmee'
           ? `<button class="btn-annuler" data-id="${r.id}">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                 <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                 <circle cx="12" cy="12" r="10"/>
+                 <line x1="15" y1="9" x2="9" y2="15"/>
+                 <line x1="9" y1="9" x2="15" y2="15"/>
                </svg>Annuler
              </button>`
           : `<span class="td-action-empty">—</span>`
@@ -162,7 +175,9 @@ function renderPagination() {
   if (pages <= 1) { pg.innerHTML = ''; return; }
 
   let html = `<button class="pg-btn" id="pgPrev" ${currentPage===1?'disabled':''}>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
   </button>`;
 
   for (let i=1; i<=pages; i++) {
@@ -173,7 +188,9 @@ function renderPagination() {
   }
 
   html += `<button class="pg-btn" id="pgNext" ${currentPage===pages?'disabled':''}>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
   </button>`;
 
   pg.innerHTML = html;
@@ -236,7 +253,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tDate = document.getElementById('tDate');
   if (tDate) tDate.textContent = new Date().toLocaleDateString('fr-FR',{ weekday:'long', day:'numeric', month:'long' });
 
-  /* Search */
   const searchInput = document.getElementById('searchInput');
   const btnClear    = document.getElementById('btnClear');
   searchInput?.addEventListener('input', () => {
@@ -250,7 +266,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyFilters();
   });
 
-  /* Filtre statut */
   document.getElementById('filterStatut')?.addEventListener('click', e => {
     const btn = e.target.closest('.ftab');
     if (!btn) return;
@@ -259,11 +274,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyFilters();
   });
 
-  /* Dates */
   document.getElementById('dateFrom')?.addEventListener('change', applyFilters);
   document.getElementById('dateTo')?.addEventListener('change', applyFilters);
 
-  /* Reset */
   document.getElementById('btnResetFilters')?.addEventListener('click', () => {
     if (searchInput) { searchInput.value=''; btnClear?.classList.remove('visible'); }
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
@@ -273,7 +286,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyFilters();
   });
 
-  /* Refresh */
   document.getElementById('btnRefresh')?.addEventListener('click', async () => {
     const svg = document.querySelector('#btnRefresh svg');
     if (svg) svg.style.animation = 'spin .6s linear infinite';
@@ -284,7 +296,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     finally { if (svg) svg.style.animation = ''; }
   });
 
-  /* Modal */
   document.getElementById('btnModalCancel')?.addEventListener('click', closeModal);
   document.getElementById('btnModalConfirm')?.addEventListener('click', confirmAnnulation);
   document.getElementById('modalOverlay')?.addEventListener('click', e => {
