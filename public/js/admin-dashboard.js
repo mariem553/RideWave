@@ -4,7 +4,7 @@
 'use strict';
 
 const API_URL  = '/api/admin/stats';
-const USE_MOCK = true; // Phase 1 : mock data — passer à false en Phase 2
+const USE_MOCK = true;
 
 /* ── Données mock ── */
 const MOCK = {
@@ -13,12 +13,12 @@ const MOCK = {
   reservationsConfirmees:  19,
   reservationsAnnulees:    3,
   dernieresReservations: [
-    { id:1, client:'Ahmed Ben Ali',   voiture:'Toyota Corolla',  dateDebut:'2026-03-10', dateFin:'2026-03-13', totalPrix:255.00, statut:'confirmee' },
-    { id:2, client:'Sana Trabelsi',   voiture:'Volkswagen Golf', dateDebut:'2026-03-05', dateFin:'2026-03-07', totalPrix:190.00, statut:'annulee'   },
-    { id:3, client:'Karim Mansouri',  voiture:'Renault Clio',    dateDebut:'2026-04-01', dateFin:'2026-04-05', totalPrix:260.00, statut:'confirmee' },
-    { id:4, client:'Nadia Bouaziz',   voiture:'Peugeot 308',     dateDebut:'2026-04-12', dateFin:'2026-04-16', totalPrix:440.00, statut:'confirmee' },
-    { id:5, client:'Youssef Hamdi',   voiture:'Dacia Sandero',   dateDebut:'2026-04-20', dateFin:'2026-04-22', totalPrix:110.00, statut:'annulee'   },
-    { id:6, client:'Sana Trabelsi',   voiture:'Toyota Corolla',  dateDebut:'2026-05-01', dateFin:'2026-05-04', totalPrix:255.00, statut:'confirmee' },
+    { id:1, client:'Ahmed Ben Ali',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-03-10', dateFin:'2026-03-13', totalPrix:255.00, statut:'confirmee' },
+    { id:2, client:'Sana Trabelsi',  marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-03-05', dateFin:'2026-03-07', totalPrix:190.00, statut:'annulee'   },
+    { id:3, client:'Karim Mansouri', marque:'Renault',    modele:'Clio',    dateDebut:'2026-04-01', dateFin:'2026-04-05', totalPrix:260.00, statut:'confirmee' },
+    { id:4, client:'Nadia Bouaziz',  marque:'Peugeot',    modele:'308',     dateDebut:'2026-04-12', dateFin:'2026-04-16', totalPrix:440.00, statut:'confirmee' },
+    { id:5, client:'Youssef Hamdi',  marque:'Dacia',      modele:'Sandero', dateDebut:'2026-04-20', dateFin:'2026-04-22', totalPrix:110.00, statut:'annulee'   },
+    { id:6, client:'Sana Trabelsi',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-05-01', dateFin:'2026-05-04', totalPrix:255.00, statut:'confirmee' },
   ],
 };
 
@@ -53,6 +53,9 @@ const nights   = (d1,d2) => { const n = Math.round((new Date(d2)-new Date(d1))/8
 const fmtPrix  = n => `${Number(n).toFixed(2)} TND`;
 const bCls     = s => ({ confirmee:'b-ok', annulee:'b-ko' })[s?.toLowerCase()] || 'b-wait';
 const bLbl     = s => ({ confirmee:'Confirmée', annulee:'Annulée' })[s?.toLowerCase()] || s || '—';
+
+/* ── Construit le nom voiture depuis marque + modele ── */
+const nomVoiture = r => esc((r.marque || '') + ' ' + (r.modele || ''));
 
 /* ════════════════════════════
    COUNTER ANIMATION
@@ -127,7 +130,7 @@ function renderTable(rows) {
   const total   = rows.length;
   const visible = rows.slice(0, MAX_ROWS);
 
-  if (count)  count.textContent = `${total} entrée${total>1?'s':''}`;
+  if (count) count.textContent = `${total} entrée${total>1?'s':''}`;
 
   if (!total) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--muted);font-size:13px">Aucune réservation récente</td></tr>`;
@@ -143,7 +146,7 @@ function renderTable(rows) {
           <span class="cl-name">${esc(r.client)}</span>
         </div>
       </td>
-      <td class="td-car">${esc(r.voiture)}</td>
+      <td class="td-car">${nomVoiture(r)}</td>
       <td class="td-dates">
         ${fmtDate(r.dateDebut)}<span class="td-sep">→</span>${fmtDate(r.dateFin)}
         <br><span style="font-size:11px;color:var(--muted)">${nights(r.dateDebut,r.dateFin)}</span>
@@ -187,13 +190,14 @@ function openDetailModal(r) {
   if (!overlay) return;
 
   const imgContent = r.voitureImage
-    ? `<img src="${esc(r.voitureImage)}" alt="${esc(r.voiture)}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover"/>`
+    ? `<img src="${esc(r.voitureImage)}" alt="${nomVoiture(r)}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover"/>`
     : `<div class="modal-img-fallback">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/>
+          <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/>
+          <rect x="9" y="11" width="14" height="10" rx="2"/>
           <circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
         </svg>
-        <span>${esc(r.voiture)}</span>
+        <span>${nomVoiture(r)}</span>
       </div>`;
 
   overlay.querySelector('.detail-modal').innerHTML = `
@@ -206,7 +210,9 @@ function openDetailModal(r) {
     <div class="detail-body">
       <div class="detail-car-header">
         <div>
-          <div class="detail-car-name"><em>${esc(r.voiture)}</em></div>
+          <div class="detail-car-name">
+            ${esc(r.marque || '')} <em>${esc(r.modele || '')}</em>
+          </div>
         </div>
         <span class="badge ${bCls(r.statut)}">${bLbl(r.statut)}</span>
       </div>
