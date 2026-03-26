@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS reservations (
   voiture_id  INT            NOT NULL,
   date_debut  DATE           NOT NULL,
   date_fin    DATE           NOT NULL,
+  num_permis  VARCHAR(30)    NOT NULL,
   total_prix  DECIMAL(10,2)  NOT NULL,
   statut      ENUM('confirmee','annulee') NOT NULL DEFAULT 'confirmee',
   created_at  TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
