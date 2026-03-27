@@ -7,6 +7,49 @@ const express         = require("express");
 const router          = express.Router();
 const db              = require("../config/db");
 const { verifyAdmin } = require("../middleware/auth");
+const { mapVoiture }  = require("../utils/mapVoiture");
+
+const SELECT_VOITURE_ROW = `SELECT id, marque, modele, annee, prix_jour, image_url, disponible,
+  categorie, carburant, transmission, places,
+  description, puissance_cv, vitesse_max_kmh, accel_0_100
+  FROM voitures`;
+
+function parsePresentationFields(body) {
+  const description =
+    body.description != null && String(body.description).trim() !== ""
+      ? String(body.description).trim()
+      : null;
+  const opt = (k, max) => {
+    const x = body[k];
+    if (x == null || String(x).trim() === "") return null;
+    return String(x).trim().slice(0, max);
+  };
+  return {
+    description,
+    puissance_cv: opt("puissance_cv", 20),
+    vitesse_max_kmh: opt("vitesse_max_kmh", 20),
+    accel_0_100: opt("accel_0_100", 20),
+  };
+}
+
+function parseVoitureDetails(body) {
+  const categorie =
+    body.categorie != null && String(body.categorie).trim() !== ""
+      ? String(body.categorie).trim().slice(0, 60)
+      : "Berline";
+  const carburant =
+    body.carburant != null && String(body.carburant).trim() !== ""
+      ? String(body.carburant).trim().slice(0, 60)
+      : "Essence";
+  const transmission =
+    body.transmission != null && String(body.transmission).trim() !== ""
+      ? String(body.transmission).trim().slice(0, 60)
+      : "Auto";
+  let places = parseInt(body.places, 10);
+  if (Number.isNaN(places) || places < 1) places = 5;
+  if (places > 99) places = 99;
+  return { categorie, carburant, transmission, places };
+}
 
 /* ════════════════════════════════════════
    GET /api/admin/stats
@@ -135,6 +178,170 @@ router.get("/reservations", verifyAdmin, async (req, res) => {
 
   } catch (err) {
     console.error("[adminRoutes] /reservations error:", err);
+    res.status(500).json({ message: "Erreur serveur", error: err.message });
+  }
+});
+
+/* ════════════════════════════════════════
+   POST /api/admin/voitures — Créer (MySQL)
+════════════════════════════════════════ */
+router.post("/voitures", verifyAdmin, async (req, res) => {
+  try {
+    const { marque, modele, annee, prix_jour, image_url, disponible } = req.body;
+    const details = parseVoitureDetails(req.body);
+    const pres = parsePresentationFields(req.body);
+
+    if (!marque || !modele || annee == null || prix_jour == null) {
+      return res.status(400).json({
+        message: "marque, modele, annee et prix_jour sont requis.",
+      });
+    }
+
+    const anneeNum = parseInt(annee, 10);
+    const prix = parseFloat(prix_jour);
+    if (Number.isNaN(anneeNum) || Number.isNaN(prix) || prix < 0) {
+      return res.status(400).json({ message: "Année ou prix invalide." });
+    }
+
+    const dispo = disponible === true || disponible === 1 || disponible === "1" ? 1 : 0;
+    const img =
+      image_url != null && String(image_url).trim() !== ""
+        ? String(image_url).trim()
+        : null;
+
+    const [result] = await db.query(
+      `INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible,
+        categorie, carburant, transmission, places,
+        description, puissance_cv, vitesse_max_kmh, accel_0_100)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        String(marque).trim(),
+        String(modele).trim(),
+        anneeNum,
+        prix,
+        img,
+        dispo,
+        details.categorie,
+        details.carburant,
+        details.transmission,
+        details.places,
+        pres.description,
+        pres.puissance_cv,
+        pres.vitesse_max_kmh,
+        pres.accel_0_100,
+      ]
+    );
+
+    const [[row]] = await db.query(`${SELECT_VOITURE_ROW} WHERE id = ?`, [
+      result.insertId,
+    ]);
+
+    res.status(201).json(mapVoiture(row));
+  } catch (err) {
+    console.error("[adminRoutes] POST /voitures", err);
+    res.status(500).json({ message: "Erreur serveur", error: err.message });
+  }
+});
+
+/* ════════════════════════════════════════
+   PUT /api/admin/voitures/:id — Modifier
+════════════════════════════════════════ */
+router.put("/voitures/:id", verifyAdmin, async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "ID invalide" });
+  }
+
+  try {
+    const { marque, modele, annee, prix_jour, image_url, disponible } = req.body;
+    const details = parseVoitureDetails(req.body);
+    const pres = parsePresentationFields(req.body);
+
+    if (!marque || !modele || annee == null || prix_jour == null) {
+      return res.status(400).json({
+        message: "marque, modele, annee et prix_jour sont requis.",
+      });
+    }
+
+    const anneeNum = parseInt(annee, 10);
+    const prix = parseFloat(prix_jour);
+    if (Number.isNaN(anneeNum) || Number.isNaN(prix) || prix < 0) {
+      return res.status(400).json({ message: "Année ou prix invalide." });
+    }
+
+    const dispo = disponible === true || disponible === 1 || disponible === "1" ? 1 : 0;
+    const img =
+      image_url != null && String(image_url).trim() !== ""
+        ? String(image_url).trim()
+        : null;
+
+    const [upd] = await db.query(
+      `UPDATE voitures SET marque = ?, modele = ?, annee = ?, prix_jour = ?, image_url = ?, disponible = ?,
+        categorie = ?, carburant = ?, transmission = ?, places = ?,
+        description = ?, puissance_cv = ?, vitesse_max_kmh = ?, accel_0_100 = ?
+       WHERE id = ?`,
+      [
+        String(marque).trim(),
+        String(modele).trim(),
+        anneeNum,
+        prix,
+        img,
+        dispo,
+        details.categorie,
+        details.carburant,
+        details.transmission,
+        details.places,
+        pres.description,
+        pres.puissance_cv,
+        pres.vitesse_max_kmh,
+        pres.accel_0_100,
+        id,
+      ]
+    );
+
+    if (upd.affectedRows === 0) {
+      return res.status(404).json({ message: "Voiture introuvable." });
+    }
+
+    const [[row]] = await db.query(`${SELECT_VOITURE_ROW} WHERE id = ?`, [id]);
+
+    res.json(mapVoiture(row));
+  } catch (err) {
+    console.error("[adminRoutes] PUT /voitures/:id", err);
+    res.status(500).json({ message: "Erreur serveur", error: err.message });
+  }
+});
+
+/* ════════════════════════════════════════
+   DELETE /api/admin/voitures/:id
+════════════════════════════════════════ */
+router.delete("/voitures/:id", verifyAdmin, async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "ID invalide" });
+  }
+
+  try {
+    const [[{ c }]] = await db.query(
+      "SELECT COUNT(*) AS c FROM reservations WHERE voiture_id = ?",
+      [id]
+    );
+
+    if (c > 0) {
+      return res.status(400).json({
+        message:
+          "Impossible de supprimer : des réservations sont liées à ce véhicule.",
+      });
+    }
+
+    const [del] = await db.query("DELETE FROM voitures WHERE id = ?", [id]);
+    if (del.affectedRows === 0) {
+      return res.status(404).json({ message: "Voiture introuvable." });
+    }
+
+    res.json({ message: "Voiture supprimée." });
+  } catch (err) {
+    console.error("[adminRoutes] DELETE /voitures/:id", err);
     res.status(500).json({ message: "Erreur serveur", error: err.message });
   }
 });

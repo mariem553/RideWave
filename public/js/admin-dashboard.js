@@ -4,7 +4,7 @@
 'use strict';
 
 const API_URL  = '/api/admin/stats';
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 /* ── Données mock ── */
 const MOCK = {
@@ -82,7 +82,7 @@ const KPI = [
   {
     k:'voituresDisponibles', t:'dispo', lbl:'Voitures disponibles', pill:'↑ Disponibles',
     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
-    sub: s => `${Math.round(s.voituresDisponibles/s.totalVoitures*100)}% du parc libre`,
+    sub: s => (s.totalVoitures ? `${Math.round((s.voituresDisponibles / s.totalVoitures) * 100)}% du parc libre` : '—'),
   },
   {
     k:'reservationsConfirmees', t:'confirmed', lbl:'Réservations confirmées', pill:'↑ Ce mois',

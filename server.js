@@ -30,6 +30,23 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "RideWave API running ✅" });
 });
 
+const db = require("./config/db");
+app.get("/api/health/db", async (req, res) => {
+  try {
+    await db.query("SELECT 1");
+    res.json({
+      ok: true,
+      database: process.env.DB_NAME || "non défini",
+    });
+  } catch (err) {
+    res.status(503).json({
+      ok: false,
+      message: "Connexion MySQL impossible — vérifiez .env et que MySQL tourne.",
+      error: err.message,
+    });
+  }
+});
+
 // Pages admin
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "views","login.html"));

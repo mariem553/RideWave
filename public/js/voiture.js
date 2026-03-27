@@ -8,6 +8,15 @@
 /* ── CONFIG ── */
 const PER_PAGE = 6;
 
+/** Si l’URL d’image échoue (404), une image différente par id — évite la même photo partout */
+const CARD_IMG_FALLBACKS = [
+  "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80",
+  "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80",
+  "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?w=800&q=80",
+  "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80",
+  "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80",
+];
+
 /* ── STATE ── */
 let state = {
   search: '',
@@ -19,6 +28,9 @@ let state = {
   sort: 'default',
   page: 1
 };
+
+/** Flotte chargée depuis MySQL via GET /api/voitures */
+let VOITURES = [];
 
 /* ── DOM REFS ── */
 const grid        = document.getElementById('cars-grid');
@@ -76,6 +88,21 @@ document.getElementById('hamburger').addEventListener('click', () => {
 document.getElementById('mobileClose').addEventListener('click', () => {
   document.getElementById('mobileMenu').classList.remove('open');
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   API — flotte (MySQL)
+   ═══════════════════════════════════════════════════════════════ */
+
+async function loadVoitures() {
+  try {
+    const res = await fetch("/api/voitures");
+    if (!res.ok) throw new Error("API voitures");
+    VOITURES = await res.json();
+  } catch (e) {
+    console.error("[RideWave] loadVoitures", e);
+    VOITURES = [];
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    POPULATE BRANDS
@@ -269,10 +296,11 @@ function buildCard(v) {
   const el = document.createElement('div');
   el.className = 'car-card'; el.dataset.id = v.id;
   const d = v.disponible;
+  const imgFallback = CARD_IMG_FALLBACKS[(Math.max(1, v.id) - 1) % CARD_IMG_FALLBACKS.length];
   el.innerHTML = `
     <div class="card-photo">
       <img class="card-img" src="${v.photo}" alt="${v.marque} ${v.modele}" loading="lazy"
-           onerror="this.src='https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=800&q=80'">
+           onerror="this.onerror=null;this.src='${imgFallback}'">
       <div class="card-fade"></div>
       <span class="card-badge ${d?'badge-ok':'badge-no'}"><span class="badge-dot"></span>${d?'Disponible':'Indisponible'}</span>
       <span class="card-cat">${v.categorie}</span>
@@ -430,11 +458,13 @@ function initReveal() {
    INIT
    ═══════════════════════════════════════════════════════════════ */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   updateNav();
   initReveal();
+  renderSkeletons();
+  await loadVoitures();
   populateBrands();
-  
+
   // 🔍 Récupérer les paramètres de l'URL
   const urlParams = new URLSearchParams(window.location.search);
   const urlType = urlParams.get('type');
@@ -470,6 +500,5 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('[RideWave] Filtre disponibilité activé');
   }
 
-  renderSkeletons();
-  setTimeout(() => render(), 500);
+  render();
 });

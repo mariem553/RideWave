@@ -1,6 +1,7 @@
 -- ============================================
---  locationvoiture_db — Schema complet
+--  RideWave — locationvoiture_db — Schéma complet
 --  Tables : users, voitures, reservations
+--  À exécuter dans MySQL Workbench (ou mysql CLI) avant seed.sql
 -- ============================================
 
 CREATE DATABASE IF NOT EXISTS locationvoiture_db
@@ -32,14 +33,6 @@ CREATE TABLE IF NOT EXISTS voitures (
   prix_jour  DECIMAL(8,2)   NOT NULL,
   image_url  VARCHAR(255)   DEFAULT NULL,
   disponible TINYINT(1)     NOT NULL DEFAULT 1,
-  categorie    VARCHAR(60)  NOT NULL DEFAULT 'Berline',
-  carburant    VARCHAR(60)  NOT NULL DEFAULT 'Essence',
-  transmission VARCHAR(60)  NOT NULL DEFAULT 'Auto',
-  places       TINYINT UNSIGNED NOT NULL DEFAULT 5,
-  description      TEXT         NULL,
-  puissance_cv     VARCHAR(20)  NULL DEFAULT NULL,
-  vitesse_max_kmh  VARCHAR(20)  NULL DEFAULT NULL,
-  accel_0_100      VARCHAR(20)  NULL DEFAULT NULL,
   created_at TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
