@@ -1,6 +1,7 @@
 -- ============================================
---  locationvoiture_db — Seed data
---  1 admin + 2 clients + 5 voitures
+--  RideWave — locationvoiture_db — Données de test
+--  1 admin + 2 clients + 5 voitures + 2 réservations
+--  Exécuter après schema.sql (même base : locationvoiture_db)
 -- ============================================
 
 USE locationvoiture_db;
@@ -14,7 +15,7 @@ INSERT INTO users (nom, email, password, role) VALUES
   ('Sana Trabelsi',   'sana@email.com',     'client123', 'client');
 
 -- ─────────────────────────────────────────────
---  VOITURES  (images : public/images/voitures/*.jpg → URL web /images/voitures/...)
+--  VOITURES
 -- ─────────────────────────────────────────────
 INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible) VALUES
   ('Toyota',    'Corolla',   2021, 85.00,  '/images/voitures/corolla.jpg',   1),

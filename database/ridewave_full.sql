@@ -1,6 +1,6 @@
 -- ============================================
---  locationvoiture_db — Schema complet
---  Tables : users, voitures, reservations
+--  RideWave — Installation complète MySQL
+--  Schéma + données de test (un seul script pour Workbench)
 -- ============================================
 
 CREATE DATABASE IF NOT EXISTS locationvoiture_db
@@ -10,13 +10,13 @@ CREATE DATABASE IF NOT EXISTS locationvoiture_db
 USE locationvoiture_db;
 
 -- ─────────────────────────────────────────────
---  TABLE : users  (clients ET admins — une seule table)
+--  TABLE : users
 -- ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
   id         INT AUTO_INCREMENT PRIMARY KEY,
   nom        VARCHAR(100) NOT NULL,
   email      VARCHAR(150) NOT NULL UNIQUE,
-  password   VARCHAR(100) NOT NULL,          -- stocké en texte clair
+  password   VARCHAR(100) NOT NULL,
   role       ENUM('client','admin') NOT NULL DEFAULT 'client',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
@@ -63,3 +63,22 @@ CREATE TABLE IF NOT EXISTS reservations (
   CONSTRAINT fk_reservation_voiture
     FOREIGN KEY (voiture_id) REFERENCES voitures(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
+
+-- ─────────────────────────────────────────────
+--  SEED
+-- ─────────────────────────────────────────────
+INSERT INTO users (nom, email, password, role) VALUES
+  ('Admin RideWave',  'admin@ridewave.com', 'admin123',  'admin'),
+  ('Ahmed Ben Ali',   'ahmed@email.com',    'client123', 'client'),
+  ('Sana Trabelsi',   'sana@email.com',     'client123', 'client');
+
+INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible) VALUES
+  ('Toyota',    'Corolla',   2021, 85.00,  '/images/voitures/corolla.jpg',   1),
+  ('Renault',   'Clio',      2022, 65.00,  '/images/voitures/clio.jpg',      1),
+  ('Volkswagen','Golf',      2020, 95.00,  '/images/voitures/golf.jpg',      1),
+  ('Peugeot',   '308',       2023, 110.00, '/images/voitures/peugeot308.jpg',1),
+  ('Dacia',     'Sandero',   2022, 55.00,  '/images/voitures/sandero.jpg',   0);
+
+INSERT INTO reservations (user_id, voiture_id, date_debut, date_fin, num_carte_identite, client_prenom, client_nom, client_email, client_telephone, option_chauffeur, total_prix, statut) VALUES
+  (2, 1, '2026-03-10', '2026-03-13', '12345678', 'Ahmed', 'Ben Ali', 'ahmed@email.com', '20000000', 0, 255.00, 'confirmee'),
+  (3, 3, '2026-03-05', '2026-03-07', '87654321', 'Sana', 'Trabelsi', 'sana@email.com', '90000000', 0, 190.00, 'annulee');

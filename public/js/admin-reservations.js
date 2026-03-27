@@ -5,7 +5,7 @@
 
 const API_RESERVATIONS = '/api/admin/reservations';
 const API_ANNULER      = '/api/reservations';
-const USE_MOCK         = true;
+const USE_MOCK         = false;
 const PER_PAGE         = 10;
 
 const MOCK_DATA = [

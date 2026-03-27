@@ -1,29 +1,28 @@
 /* ═══════════════════════════════════════════════════════════
-   admin-voitures.js — RideWave Admin
+   admin-voitures.js — RideWave Admin (données MySQL)
    ═══════════════════════════════════════════════════════════ */
 'use strict';
 
-const API_VOITURES = '/api/voitures';
-const USE_MOCK     = true; // Phase 1
+const API_VOITURES      = '/api/voitures';
+const API_ADMIN_VOITURES = '/api/admin/voitures';
 
-/* ── Données mock ── */
-let voitures = [
-  { id:1,  marque:'Mercedes-Benz', modele:'Classe E 220d',       annee:2026, prix_jour:320, disponible:true,  categorie:'Berline',    carburant:'Diesel',     transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80' },
-  { id:2,  marque:'BMW',           modele:'Série 5 530i',        annee:2026, prix_jour:350, disponible:true,  categorie:'Berline',    carburant:'Essence',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80' },
-  { id:3,  marque:'Audi',          modele:'A6 Quattro',          annee:2026, prix_jour:280, disponible:false, categorie:'Berline',    carburant:'Essence',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80' },
-  { id:4,  marque:'Porsche',       modele:'Cayenne S',           annee:2026, prix_jour:480, disponible:true,  categorie:'SUV',        carburant:'Essence',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80' },
-  { id:5,  marque:'Range Rover',   modele:'Velar P400',          annee:2026, prix_jour:420, disponible:true,  categorie:'SUV',        carburant:'Essence',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80' },
-  { id:6,  marque:'Tesla',         modele:'Model 3 Performance', annee:2026, prix_jour:290, disponible:true,  categorie:'Électrique', carburant:'Électrique', transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80' },
-  { id:7,  marque:'Mercedes-Benz', modele:'GLE 450 AMG',         annee:2026, prix_jour:500, disponible:false, categorie:'SUV',        carburant:'Hybride',    transmission:'Auto',   places:7, photo:'https://images.unsplash.com/photo-1547744152-14d985cb937f?w=800&q=80' },
-  { id:8,  marque:'Volkswagen',    modele:'Passat Business',     annee:2026, prix_jour:140, disponible:true,  categorie:'Berline',    carburant:'Diesel',     transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1612544448445-b8232cff3b6c?w=800&q=80' },
-  { id:9,  marque:'Toyota',        modele:'RAV4 Hybrid',         annee:2026, prix_jour:165, disponible:true,  categorie:'SUV',        carburant:'Hybride',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80' },
-  { id:10, marque:'Audi',          modele:'Q7 S-Line',           annee:2026, prix_jour:390, disponible:true,  categorie:'SUV',        carburant:'Diesel',     transmission:'Auto',   places:7, photo:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80' },
-  { id:11, marque:'BMW',           modele:'X5 xDrive40i',        annee:2026, prix_jour:440, disponible:false, categorie:'SUV',        carburant:'Essence',    transmission:'Auto',   places:5, photo:'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80' },
-  { id:12, marque:'Volkswagen',    modele:'Golf 8 GTI',          annee:2026, prix_jour:110, disponible:true,  categorie:'Compacte',   carburant:'Essence',    transmission:'Manuel', places:5, photo:'https://images.unsplash.com/photo-1632245889029-e406faaa34cd?w=800&q=80' },
-];
-
+let voitures  = [];
 let selected  = null;
 let editingId = null;
+
+function adminHeaders() {
+  const t = getAdminToken();
+  return {
+    'Content-Type': 'application/json',
+    ...(t ? { Authorization: `Bearer ${t}` } : {}),
+  };
+}
+
+async function loadVoitures() {
+  const res = await fetch(API_VOITURES);
+  if (!res.ok) throw new Error('Chargement des voitures');
+  voitures = await res.json();
+}
 
 /* ════════════════════════════
    STATS
@@ -85,8 +84,17 @@ function selectVoiture(id) {
   renderDetail();
 }
 
+const EMPTY_DETAIL = `<div class="empty">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(201,169,98,0.25)" stroke-width="1.5">
+      <path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>
+    </svg>Sélectionnez une voiture</div>`;
+
 function renderDetail() {
   const v = selected;
+  if (!v) {
+    document.getElementById('detail-panel').innerHTML = EMPTY_DETAIL;
+    return;
+  }
   document.getElementById('detail-panel').innerHTML = `
     <div class="detail-img-wrap">
       <img src="${v.photo}" onerror="this.style.display='none'" alt="${v.marque} ${v.modele}"/>
@@ -136,6 +144,7 @@ function openAdd() {
 function openEdit(id) {
   editingId = id;
   const v = voitures.find(x => x.id === id);
+  if (!v) return;
   document.getElementById('modal-title').textContent = 'Modifier la voiture';
   document.getElementById('form-marque').value       = v.marque;
   document.getElementById('form-modele').value       = v.modele;
@@ -154,67 +163,120 @@ function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
 
-function saveVoiture() {
+async function saveVoiture() {
   const marque       = document.getElementById('form-marque').value.trim();
   const modele       = document.getElementById('form-modele').value.trim();
-  const annee        = parseInt(document.getElementById('form-annee').value);
+  const annee        = parseInt(document.getElementById('form-annee').value, 10);
   const prix         = parseFloat(document.getElementById('form-prix').value);
-  const cat          = document.getElementById('form-cat').value;
-  const carburant    = document.getElementById('form-carburant').value;
-  const transmission = document.getElementById('form-transmission').value;
-  const places       = parseInt(document.getElementById('form-places').value);
+  const categorie    = document.getElementById('form-cat').value.trim();
+  const carburant    = document.getElementById('form-carburant').value.trim();
+  const transmission = document.getElementById('form-transmission').value.trim();
+  const places       = parseInt(document.getElementById('form-places').value, 10);
   const photo        = document.getElementById('form-photo').value.trim();
   const dispo        = document.getElementById('form-dispo').checked;
 
-  if (!marque || !modele || !annee || !prix) {
+  if (!marque || !modele || Number.isNaN(annee) || Number.isNaN(prix)) {
     showToast('Veuillez remplir les champs obligatoires.', 'error');
     return;
   }
 
-  if (editingId) {
-    voitures = voitures.map(v => v.id === editingId
-      ? { ...v, marque, modele, annee, prix_jour:prix, categorie:cat, carburant, transmission, places, photo:photo||v.photo, disponible:dispo }
-      : v);
-    if (selected?.id === editingId) selected = voitures.find(v => v.id === editingId);
-    showToast('Voiture modifiée avec succès', 'success');
+  const body = {
+    marque,
+    modele,
+    annee,
+    prix_jour: prix,
+    image_url: photo || '',
+    disponible: dispo,
+    categorie: categorie || 'Berline',
+    carburant: carburant || 'Essence',
+    transmission: transmission || 'Auto',
+    places: Number.isNaN(places) || places < 1 ? 5 : Math.min(99, places),
+  };
 
-    /* Phase 2 :
-    await fetch(`${API_VOITURES}/${editingId}`, { method:'PUT', headers:{'Authorization':..., 'Content-Type':'application/json'}, body:JSON.stringify({...}) });
-    */
-  } else {
-    const newId = Math.max(...voitures.map(v => v.id)) + 1;
-    const newV  = { id:newId, marque, modele, annee, prix_jour:prix, categorie:cat, carburant, transmission, places, photo:photo||'', disponible:dispo };
-    voitures.push(newV);
-    selected = newV;
-    showToast('Voiture ajoutée avec succès', 'success');
+  try {
+    let res;
+    if (editingId) {
+      res = await fetch(`${API_ADMIN_VOITURES}/${editingId}`, {
+        method: 'PUT',
+        headers: adminHeaders(),
+        body: JSON.stringify(body),
+      });
+    } else {
+      res = await fetch(API_ADMIN_VOITURES, {
+        method: 'POST',
+        headers: adminHeaders(),
+        body: JSON.stringify(body),
+      });
+    }
 
-    /* Phase 2 :
-    const formData = new FormData(); // si upload fichier
-    await fetch(API_VOITURES, { method:'POST', headers:{'Authorization':...}, body:formData });
-    */
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/views/login.html';
+      return;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      showToast(data.message || 'Erreur lors de l\'enregistrement.', 'error');
+      return;
+    }
+
+    const newId = editingId || data.id;
+    showToast(editingId ? 'Voiture modifiée avec succès' : 'Voiture ajoutée avec succès', 'success');
+    closeModal();
+    await loadVoitures();
+    updateStats();
+    renderList();
+    if (newId != null) selectVoiture(newId);
+    else if (voitures.length) selectVoiture(voitures[0].id);
+    else {
+      selected = null;
+      renderDetail();
+    }
+  } catch (e) {
+    console.error(e);
+    showToast('Erreur réseau ou serveur.', 'error');
   }
-
-  closeModal();
-  updateStats();
-  renderList();
-  if (selected) renderDetail();
 }
 
-function deleteVoiture(id) {
+async function deleteVoiture(id) {
   if (!confirm('Supprimer cette voiture définitivement ?')) return;
-  voitures = voitures.filter(v => v.id !== id);
-  selected = voitures.length > 0 ? voitures[0] : null;
-  updateStats();
-  renderList();
-  if (selected) renderDetail();
-  else document.getElementById('detail-panel').innerHTML = `<div class="empty">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(201,169,98,0.25)" stroke-width="1.5">
-      <path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>
-    </svg>Sélectionnez une voiture</div>`;
 
-  /* Phase 2 :
-  await fetch(`${API_VOITURES}/${id}`, { method:'DELETE', headers:{'Authorization':...} });
-  */
+  try {
+    const res = await fetch(`${API_ADMIN_VOITURES}/${id}`, {
+      method: 'DELETE',
+      headers: adminHeaders(),
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/views/login.html';
+      return;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      showToast(data.message || 'Suppression impossible.', 'error');
+      return;
+    }
+
+    showToast('Voiture supprimée.', 'success');
+    await loadVoitures();
+    updateStats();
+    const keepId = selected && selected.id !== id ? selected.id : null;
+    if (keepId && voitures.some(v => v.id === keepId)) {
+      selectVoiture(keepId);
+    } else if (voitures.length) {
+      selectVoiture(voitures[0].id);
+    } else {
+      selected = null;
+      renderList();
+      renderDetail();
+    }
+  } catch (e) {
+    console.error(e);
+    showToast('Erreur réseau ou serveur.', 'error');
+  }
 }
 
 /* Close modal on overlay click */
@@ -225,14 +287,26 @@ document.getElementById('modal-overlay')?.addEventListener('click', e => {
 /* ════════════════════════════
    INIT
 ════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   if (!initSidebar('voitures')) return;
 
   const tDate = document.getElementById('tDate');
   if (tDate) tDate.textContent = new Date().toLocaleDateString('fr-FR',{ weekday:'long', day:'numeric', month:'long' });
 
-  updateStats();
-  renderList();
-  selectVoiture(1);
+  try {
+    await loadVoitures();
+    updateStats();
+    renderList();
+    if (voitures.length) selectVoiture(voitures[0].id);
+    else {
+      selected = null;
+      renderDetail();
+    }
+  } catch (e) {
+    console.error(e);
+    showToast('Impossible de charger les voitures depuis le serveur.', 'error');
+    selected = null;
+    renderDetail();
+  }
   hideLoading();
 });

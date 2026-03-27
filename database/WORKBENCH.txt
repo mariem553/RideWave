@@ -1,0 +1,28 @@
+RideWave — MySQL Workbench
+==========================
+
+Fichiers :
+  schema.sql       → crée la base locationvoiture_db et les tables
+  seed.sql         → insère les données (à lancer après schema.sql)
+  ridewave_full.sql → tout en un seul script (recommandé pour une install neuve)
+
+Dans Workbench :
+  1. File → Open SQL Script → choisir ridewave_full.sql (ou schema puis seed)
+  2. Connexion à votre serveur MySQL local
+  3. Éclair (Execute) pour exécuter tout le script
+
+Réinstaller depuis zéro :
+  DROP DATABASE IF EXISTS locationvoiture_db;
+  puis exécuter ridewave_full.sql
+
+Comptes de test (seed) :
+  admin@ridewave.com / admin123
+  ahmed@email.com    / client123
+  sana@email.com     / client123
+
+Node.js (projet RideWave) :
+  À la racine du projet, fichier .env avec DB_HOST, DB_USER, DB_PASS, DB_NAME=locationvoiture_db
+  et JWT_SECRET (obligatoire pour connexion et réservations).
+  Copier .env.example vers .env puis adapter.
+  Vérifier la connexion : démarrer npm run dev puis ouvrir
+  http://localhost:3000/api/health/db  (ok: true si MySQL est joignable)
