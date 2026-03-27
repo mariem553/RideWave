@@ -4,7 +4,8 @@ const db = require("../config/db");
 const { mapVoiture } = require("../utils/mapVoiture");
 
 const SELECT_VOITURE = `SELECT id, marque, modele, annee, prix_jour, image_url, disponible,
-  categorie, carburant, transmission, places
+  categorie, carburant, transmission, places,
+  description, puissance_cv, vitesse_max_kmh, accel_0_100
   FROM voitures`;
 
 router.get("/", async (req, res) => {

@@ -137,6 +137,10 @@ function openAdd() {
   document.getElementById('form-transmission').value= 'Auto';
   document.getElementById('form-places').value      = '5';
   document.getElementById('form-photo').value       = '';
+  document.getElementById('form-description').value = '';
+  document.getElementById('form-puissance').value   = '';
+  document.getElementById('form-vmax').value         = '';
+  document.getElementById('form-accel').value       = '';
   document.getElementById('form-dispo').checked     = true;
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -155,6 +159,14 @@ function openEdit(id) {
   document.getElementById('form-transmission').value = v.transmission;
   document.getElementById('form-places').value       = v.places;
   document.getElementById('form-photo').value        = v.photo;
+  document.getElementById('form-description').value =
+    v.description != null ? String(v.description) : '';
+  document.getElementById('form-puissance').value =
+    v.puissance_cv != null ? String(v.puissance_cv) : '';
+  document.getElementById('form-vmax').value =
+    v.vitesse_max_kmh != null ? String(v.vitesse_max_kmh) : '';
+  document.getElementById('form-accel').value =
+    v.accel_0_100 != null ? String(v.accel_0_100) : '';
   document.getElementById('form-dispo').checked      = v.disponible;
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -173,6 +185,10 @@ async function saveVoiture() {
   const transmission = document.getElementById('form-transmission').value.trim();
   const places       = parseInt(document.getElementById('form-places').value, 10);
   const photo        = document.getElementById('form-photo').value.trim();
+  const description  = document.getElementById('form-description').value.trim();
+  const puissance    = document.getElementById('form-puissance').value.trim();
+  const vmax         = document.getElementById('form-vmax').value.trim();
+  const accel        = document.getElementById('form-accel').value.trim();
   const dispo        = document.getElementById('form-dispo').checked;
 
   if (!marque || !modele || Number.isNaN(annee) || Number.isNaN(prix)) {
@@ -191,6 +207,10 @@ async function saveVoiture() {
     carburant: carburant || 'Essence',
     transmission: transmission || 'Auto',
     places: Number.isNaN(places) || places < 1 ? 5 : Math.min(99, places),
+    description: description || null,
+    puissance_cv: puissance || null,
+    vitesse_max_kmh: vmax || null,
+    accel_0_100: accel || null,
   };
 
   try {

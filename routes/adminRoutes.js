@@ -10,8 +10,27 @@ const { verifyAdmin } = require("../middleware/auth");
 const { mapVoiture }  = require("../utils/mapVoiture");
 
 const SELECT_VOITURE_ROW = `SELECT id, marque, modele, annee, prix_jour, image_url, disponible,
-  categorie, carburant, transmission, places
+  categorie, carburant, transmission, places,
+  description, puissance_cv, vitesse_max_kmh, accel_0_100
   FROM voitures`;
+
+function parsePresentationFields(body) {
+  const description =
+    body.description != null && String(body.description).trim() !== ""
+      ? String(body.description).trim()
+      : null;
+  const opt = (k, max) => {
+    const x = body[k];
+    if (x == null || String(x).trim() === "") return null;
+    return String(x).trim().slice(0, max);
+  };
+  return {
+    description,
+    puissance_cv: opt("puissance_cv", 20),
+    vitesse_max_kmh: opt("vitesse_max_kmh", 20),
+    accel_0_100: opt("accel_0_100", 20),
+  };
+}
 
 function parseVoitureDetails(body) {
   const categorie =
@@ -170,6 +189,7 @@ router.post("/voitures", verifyAdmin, async (req, res) => {
   try {
     const { marque, modele, annee, prix_jour, image_url, disponible } = req.body;
     const details = parseVoitureDetails(req.body);
+    const pres = parsePresentationFields(req.body);
 
     if (!marque || !modele || annee == null || prix_jour == null) {
       return res.status(400).json({
@@ -191,8 +211,9 @@ router.post("/voitures", verifyAdmin, async (req, res) => {
 
     const [result] = await db.query(
       `INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible,
-        categorie, carburant, transmission, places)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        categorie, carburant, transmission, places,
+        description, puissance_cv, vitesse_max_kmh, accel_0_100)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         String(marque).trim(),
         String(modele).trim(),
@@ -204,6 +225,10 @@ router.post("/voitures", verifyAdmin, async (req, res) => {
         details.carburant,
         details.transmission,
         details.places,
+        pres.description,
+        pres.puissance_cv,
+        pres.vitesse_max_kmh,
+        pres.accel_0_100,
       ]
     );
 
@@ -230,6 +255,7 @@ router.put("/voitures/:id", verifyAdmin, async (req, res) => {
   try {
     const { marque, modele, annee, prix_jour, image_url, disponible } = req.body;
     const details = parseVoitureDetails(req.body);
+    const pres = parsePresentationFields(req.body);
 
     if (!marque || !modele || annee == null || prix_jour == null) {
       return res.status(400).json({
@@ -251,7 +277,8 @@ router.put("/voitures/:id", verifyAdmin, async (req, res) => {
 
     const [upd] = await db.query(
       `UPDATE voitures SET marque = ?, modele = ?, annee = ?, prix_jour = ?, image_url = ?, disponible = ?,
-        categorie = ?, carburant = ?, transmission = ?, places = ?
+        categorie = ?, carburant = ?, transmission = ?, places = ?,
+        description = ?, puissance_cv = ?, vitesse_max_kmh = ?, accel_0_100 = ?
        WHERE id = ?`,
       [
         String(marque).trim(),
@@ -264,6 +291,10 @@ router.put("/voitures/:id", verifyAdmin, async (req, res) => {
         details.carburant,
         details.transmission,
         details.places,
+        pres.description,
+        pres.puissance_cv,
+        pres.vitesse_max_kmh,
+        pres.accel_0_100,
         id,
       ]
     );

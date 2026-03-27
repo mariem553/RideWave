@@ -4,64 +4,58 @@
    Dépend de main.js (chargé avant)
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── Données statiques — Phase 1 ────────────────────────────── */
-/* En Phase 2 : remplacer par GET /api/voitures               */
-const VEHICLES = [
-    {
-        id: 1,
-        name: 'Porsche 911 Turbo S',
-        category: 'Sport',
-        price: 1950,
-        image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80',
-        description: 'The pinnacle of Porsche engineering. An icon refined across generations, delivering breathtaking performance with everyday usability.',
-        specs: { power: '650', speed: '330', acceleration: '2.7s' }
-    },
-    {
-        id: 2,
-        name: 'Bentley Continental GT',
-        category: 'Grand Tourer',
-        price: 1500,
-        image: 'https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=800&q=80',
-        description: 'The grand tourer reimagined. Where hand-crafted British luxury meets supercar performance across the most demanding roads.',
-        specs: { power: '635', speed: '333', acceleration: '3.6s' }
-    },
-    {
-        id: 3,
-        name: 'Lamborghini Huracán',
-        category: 'Supercar',
-        price: 2350,
-        image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80',
-        description: "Pure Italian ferocity. The Huracán distills decades of Sant'Agata excellence into a visceral, unforgettable driving experience.",
-        specs: { power: '640', speed: '325', acceleration: '2.9s' }
-    },
-    {
-        id: 4,
-        name: 'Rolls-Royce Ghost',
-        category: 'Luxury',
-        price: 2545,
-        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&q=80',
-        description: 'The most serene vehicle ever crafted. An effortless sanctuary of Starlight headliner, whisper-quiet refinement and unbounded presence.',
-        specs: { power: '563', speed: '250', acceleration: '4.8s' }
-    },
-    {
-        id: 5,
-        name: 'Ferrari F8 Tributo',
-        category: 'Supercar',
-        price: 2800,
-        image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&q=80',
-        description: 'A tribute to the most powerful V8 in Ferrari history. Aerodynamic perfection, track-bred dynamics and prancing horse heritage.',
-        specs: { power: '720', speed: '340', acceleration: '2.9s' }
-    },
-    {
-        id: 6,
-        name: 'Mercedes-Maybach S',
-        category: 'Berline',
-        price: 1300,
-        image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
-        description: 'The ultimate expression of automotive luxury. First-class rear accommodation, Burmester 4D surround sound and sculpted Teutonic elegance.',
-        specs: { power: '496', speed: '250', acceleration: '4.5s' }
+/* ─── Véhicules : GET /api/voitures (MySQL) — max 6 à l’accueil ─── */
+
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+/** Transforme la réponse API (mapVoiture) au format des cartes flip */
+function mapApiToHomeVehicle(v) {
+    const dash = '—';
+    const name = `${v.marque} ${v.modele}`;
+    const category = (v.categorie || 'Berline').toUpperCase();
+    const price = Math.round(Number(v.prix_jour));
+    const image = v.photo;
+    const description = v.description && String(v.description).trim()
+        ? String(v.description).trim()
+        : `Location premium : ${v.marque} ${v.modele} (${v.annee}). ${v.places} places · ${v.carburant} · ${v.transmission}.`;
+    const specs = {
+        power: (v.puissance_cv && String(v.puissance_cv).trim()) || dash,
+        speed: (v.vitesse_max_kmh && String(v.vitesse_max_kmh).trim()) || dash,
+        acceleration: (v.accel_0_100 && String(v.accel_0_100).trim()) || dash,
+    };
+    return { id: v.id, name, category, price, image, description, specs };
+}
+
+async function loadVehiclesFromAPI() {
+    const container = document.getElementById('vehicles-container');
+    try {
+        const res = await fetch('/api/voitures');
+        if (!res.ok) throw new Error('API voitures');
+        const raw = await res.json();
+        if (!Array.isArray(raw) || raw.length === 0) {
+            if (container) {
+                container.innerHTML = '<p class="vehicles-empty-msg" style="grid-column:1/-1;text-align:center;color:rgba(245,243,238,0.55);padding:32px;font-size:14px;">Aucun véhicule pour le moment.</p>';
+            }
+            return;
+        }
+        let list = raw.filter((v) => v.disponible);
+        if (list.length === 0) list = raw.slice(0, 6);
+        else list = list.slice(0, 6);
+        renderVehicles(list.map(mapApiToHomeVehicle));
+    } catch (err) {
+        console.error('Erreur chargement voitures:', err);
+        if (container) {
+            container.innerHTML = '<p class="vehicles-empty-msg" style="grid-column:1/-1;text-align:center;color:rgba(245,243,238,0.55);padding:32px;font-size:14px;">Impossible de charger les véhicules. Réessayez plus tard.</p>';
+        }
     }
-];
+}
 
 const TESTIMONIALS = [
     {
@@ -91,22 +85,32 @@ function renderVehicles(data) {
     const container = document.getElementById('vehicles-container');
     if (!container) return;
 
-    container.innerHTML = data.map(v => `
+    container.innerHTML = data.map(v => {
+        const name = escapeHtml(v.name);
+        const category = escapeHtml(v.category);
+        const desc = escapeHtml(v.description);
+        const sp = v.specs || { power: '—', speed: '—', acceleration: '—' };
+        const pwr = escapeHtml(sp.power);
+        const spd = escapeHtml(sp.speed);
+        const acc = escapeHtml(sp.acceleration);
+        const imgAlt = escapeHtml(v.name);
+        const imgSrc = escapeHtml(v.image);
+        return `
         <div class="vehicle-flip-wrapper">
             <div class="vehicle-card-inner">
 
                 <!-- FRONT -->
                 <div class="vehicle-card-front">
                     <div class="vehicle-img-wrap">
-                        <img src="${v.image}" alt="${v.name}" class="vehicle-img" loading="lazy">
+                        <img src="${imgSrc}" alt="${imgAlt}" class="vehicle-img" loading="lazy">
                         <div class="vehicle-price-badge">
                             ${v.price}DT<span class="price-unit">/jour</span>
                         </div>
-                        <div class="vehicle-category-badge">${v.category}</div>
+                        <div class="vehicle-category-badge">${category}</div>
                     </div>
                     <div class="vehicle-card-body">
-                        <h3 class="vehicle-card-name">${v.name}</h3>
-                        <p class="vehicle-card-desc">${v.description}</p>
+                        <h3 class="vehicle-card-name">${name}</h3>
+                        <p class="vehicle-card-desc">${desc}</p>
                     </div>
                     <div class="flip-hint">
                         <div class="flip-hint-icon">
@@ -122,21 +126,21 @@ function renderVehicles(data) {
 
                 <!-- BACK -->
                 <div class="vehicle-card-back">
-                    <span class="back-cat-tag">${v.category}</span>
-                    <h3 class="back-car-name">${v.name}</h3>
-                    <p class="back-car-desc">${v.description}</p>
+                    <span class="back-cat-tag">${category}</span>
+                    <h3 class="back-car-name">${name}</h3>
+                    <p class="back-car-desc">${desc}</p>
 
                     <div class="back-specs-grid">
                         <div class="back-spec-item">
-                            <div class="back-spec-value">${v.specs.power}</div>
+                            <div class="back-spec-value">${pwr}</div>
                             <div class="back-spec-label">chevaux</div>
                         </div>
                         <div class="back-spec-item">
-                            <div class="back-spec-value">${v.specs.acceleration}</div>
+                            <div class="back-spec-value">${acc}</div>
                             <div class="back-spec-label">0 – 100</div>
                         </div>
                         <div class="back-spec-item">
-                            <div class="back-spec-value">${v.specs.speed}</div>
+                            <div class="back-spec-value">${spd}</div>
                             <div class="back-spec-label">km/h max</div>
                         </div>
                     </div>
@@ -146,7 +150,7 @@ function renderVehicles(data) {
                             <span class="back-price-value">${v.price}DT</span>
                             <span class="back-price-unit">par jour</span>
                         </div>
-                        <button class="back-book-btn" onclick="handleBooking(${v.id})">
+                        <button type="button" class="back-book-btn" onclick="handleBooking(${Number(v.id)})">
                             <span class="btn-text">
                                 Réserver
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -160,7 +164,8 @@ function renderVehicles(data) {
 
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -511,7 +516,7 @@ if (!document.getElementById('validation-toast-styles')) {
    INIT
    ══════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-    renderVehicles(VEHICLES);
+    loadVehiclesFromAPI();
     renderTestimonials(TESTIMONIALS);
 
     setupBookingForm();
@@ -530,19 +535,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-/* ══════════════════════════════════════════════════════════════
-   PHASE 2 — À décommenter quand le backend est prêt
-   ══════════════════════════════════════════════════════════════ */
-/*
-async function loadVehiclesFromAPI() {
-    try {
-        const res  = await fetch('/api/voitures?limit=6');
-        const data = await res.json();
-        renderVehicles(data);
-    } catch (err) {
-        console.error('Erreur chargement voitures:', err);
-        renderVehicles(VEHICLES);
-    }
-}
-*/

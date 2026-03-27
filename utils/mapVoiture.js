@@ -23,6 +23,18 @@ function mapVoiture(row) {
   if (Number.isNaN(places) || places < 1) places = 5;
   if (places > 99) places = 99;
 
+  const descRaw = row.description;
+  const description =
+    descRaw != null && String(descRaw).trim() !== ""
+      ? String(descRaw).trim()
+      : null;
+
+  const optStr = (key) => {
+    const x = row[key];
+    if (x == null || String(x).trim() === "") return null;
+    return String(x).trim();
+  };
+
   return {
     id: row.id,
     marque: row.marque,
@@ -34,6 +46,10 @@ function mapVoiture(row) {
     carburant: strOr(row, "carburant", "Essence"),
     transmission: strOr(row, "transmission", "Auto"),
     places,
+    description,
+    puissance_cv: optStr("puissance_cv"),
+    vitesse_max_kmh: optStr("vitesse_max_kmh"),
+    accel_0_100: optStr("accel_0_100"),
     popularite: 70,
     photo,
   };
