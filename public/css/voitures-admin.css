@@ -302,3 +302,61 @@
   .confirm-box { padding:24px 18px 20px; }
   .confirm-btns { grid-template-columns:1fr; }
 }
+/* ═══════════════════════════════════════════════════════════
+   CORRECTION : Forcer le thème sombre pour tous les inputs
+   ═══════════════════════════════════════════════════════════ */
+input, select, textarea {
+  color-scheme: dark;
+}
+
+/* Override pour les selects et inputs admin */
+.admin-input,
+.filter-sel,
+.search-wrap input,
+select.filter-sel,
+input.admin-input,
+input.search-input {
+  background-color: #0c0c10 !important;
+  border: 1px solid rgba(201, 169, 98, 0.25) !important;
+  color: #f5f3ee !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 10px 32px 10px 12px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Placeholder */
+.admin-input::placeholder,
+.search-wrap input::placeholder {
+  color: #5a5a65 !important;
+}
+
+/* Focus */
+.admin-input:focus,
+.filter-sel:focus,
+.search-wrap input:focus {
+  border-color: #c9a962 !important;
+  box-shadow: 0 0 0 2px rgba(201, 169, 98, 0.2) !important;
+  background-color: #0e0e12 !important;
+}
+
+/* Options des selects */
+.filter-sel option,
+.admin-input option,
+select option {
+  background-color: #0c0c10 !important;
+  color: #f5f3ee !important;
+}
+
+/* Flèche du select personnalisée  */
+.filter-sel,
+select.admin-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 12px !important;
+  padding-right: 36px !important;
+}
