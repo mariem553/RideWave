@@ -404,24 +404,29 @@
               <div>
                 <label class="field-label">Nom</label>
                 <input type="text" id="client-last-name" class="res-input" placeholder="Ben Ali" />
+                <span class="field-error-msg" id="err-last-name">Nom requis</span>
               </div>
               <div>
                 <label class="field-label">Prénom</label>
                 <input type="text" id="client-first-name" class="res-input" placeholder="Ahmed" />
+                <span class="field-error-msg" id="err-first-name">Prénom requis</span>
               </div>
             </div>
             <div style="margin-bottom:16px;">
               <label class="field-label">Adresse e-mail</label>
               <input type="email" id="client-email" class="res-input" placeholder="ahmed@email.com" />
+              <span class="field-error-msg" id="err-email">Adresse e-mail invalide</span>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
               <div>
                 <label class="field-label">Téléphone</label>
                 <input type="tel" id="client-phone" class="res-input" placeholder="+216 99 999 999" />
+                <span class="field-error-msg" id="err-phone">Numéro de téléphone invalide</span>
               </div>
               <div>
                 <label class="field-label">N° CIN</label>
                 <input type="text" id="client-cin" class="res-input" placeholder="12345678" maxlength="20" />
+                <span class="field-error-msg" id="err-cin">CIN invalide (4-20 caractères)</span>
               </div>
             </div>
           </div>
@@ -640,6 +645,36 @@
     .res-input::placeholder { color: rgba(90,90,101,0.7); }
     input[type="date"].res-input { color-scheme: dark; }
 
+    .res-input.input-error {
+      border-color: rgba(239,68,68,0.6) !important;
+      background: rgba(239,68,68,0.04) !important;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.07) !important;
+    }
+    .field-error-msg {
+      display: none;
+      font-size: 11px;
+      color: #fca5a5;
+      margin-top: 5px;
+      padding-left: 2px;
+      letter-spacing: 0.02em;
+    }
+    .field-error-msg.visible {
+      display: block;
+      animation: fadeInDown 0.2s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+    .btn-shake { animation: shake 0.35s ease !important; }
+
     .recap-line {
       display: flex;
       justify-content: space-between;
@@ -675,70 +710,35 @@
       document.getElementById('navbar').classList.toggle('scrolled', window.pageYOffset > 80);
     });
 
-    /* ── Données voiture depuis sessionStorage / URL params ── */
-    const params     = new URLSearchParams(window.location.search);
-    const voitureId  = params.get('voiture_id') || sessionStorage.getItem('voiture_id');
-
-    /* Phase 1 — données statiques */
-    const VEHICLES = [
-      { id:1, name:'Porsche 911 Turbo S',    category:'Sport',        price:1950, image:'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=400&q=80' },
-      { id:2, name:'Bentley Continental GT', category:'Grand Tourer', price:1500, image:'https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=400&q=80' },
-      { id:3, name:'Lamborghini Huracán',    category:'Supercar',     price:2350, image:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&q=80' },
-      { id:4, name:'Rolls-Royce Ghost',      category:'Luxury',       price:2545, image:'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&q=80' },
-      { id:5, name:'Ferrari F8 Tributo',     category:'Supercar',     price:2800, image:'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&q=80' },
-      { id:6, name:'Mercedes-Maybach S',     category:'Berline',      price:1300, image:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80' },
-    ];
-
-    let currentCar = VEHICLES[0];
-    if (voitureId) {
-      const found = VEHICLES.find(v => v.id === parseInt(voitureId));
-      if (found) currentCar = found;
-    }
-
-    document.getElementById('car-image').src    = currentCar.image;
-    document.getElementById('car-name').textContent     = currentCar.name;
-    document.getElementById('car-category').textContent = currentCar.category;
-    document.getElementById('car-price').textContent    = currentCar.price + ' DT / jour';
-    document.getElementById('recap-name').textContent   = currentCar.name;
-    document.getElementById('recap-price-day').textContent = currentCar.price + ' DT';
-
-    /* ── Calcul récapitulatif en temps réel ── */
-    const DRIVER_PRICE = 30;
-
-    function recalc() {
-      const s = document.getElementById('start-date').value;
-      const e = document.getElementById('end-date').value;
-      const withDriver = document.getElementById('driver-option').checked;
-
-      let days = 0;
-      if (s && e && e > s) {
-        days = Math.round((new Date(e) - new Date(s)) / 86400000);
+    /* ── Pré-remplir les champs client avec l'utilisateur connecté ── */
+    document.addEventListener('DOMContentLoaded', function () {
+      try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          /* Le champ "nom" en base contient le nom complet — on le split pour nom/prénom */
+          if (user.nom) {
+            const parts = user.nom.trim().split(' ');
+            const firstName = parts.slice(1).join(' ') || parts[0];
+            const lastName  = parts[0];
+            const fnEl = document.getElementById('client-first-name');
+            const lnEl = document.getElementById('client-last-name');
+            if (fnEl && !fnEl.value) fnEl.value = firstName;
+            if (lnEl && !lnEl.value) lnEl.value = lastName;
+          }
+          if (user.email) {
+            const emailEl = document.getElementById('client-email');
+            if (emailEl && !emailEl.value) emailEl.value = user.email;
+          }
+          if (user.telephone) {
+            const phoneEl = document.getElementById('client-phone');
+            if (phoneEl && !phoneEl.value) phoneEl.value = user.telephone;
+          }
+        }
+      } catch (e) {
+        console.warn('[reservation] Impossible de pré-remplir les infos client :', e);
       }
-
-      const subtotal    = days * currentCar.price;
-      const driverTotal = withDriver ? days * DRIVER_PRICE : 0;
-      const total       = subtotal + driverTotal;
-
-      document.getElementById('recap-days').textContent     = days > 0 ? days + (days === 1 ? ' jour' : ' jours') : '—';
-      document.getElementById('recap-subtotal').textContent = days > 0 ? subtotal + ' DT' : '—';
-      document.getElementById('recap-driver').textContent   = driverTotal > 0 ? driverTotal + ' DT' : '0 DT';
-      document.getElementById('recap-total').textContent    = days > 0 ? total + ' DT' : '—';
-    }
-
-    /* Date min = aujourd'hui */
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('start-date').min = today;
-
-    document.getElementById('start-date').addEventListener('change', function () {
-      document.getElementById('end-date').min = this.value;
-      if (document.getElementById('end-date').value <= this.value) {
-        const d = new Date(this.value); d.setDate(d.getDate() + 1);
-        document.getElementById('end-date').value = d.toISOString().split('T')[0];
-      }
-      recalc();
     });
-    document.getElementById('end-date').addEventListener('change', recalc);
-    document.getElementById('driver-option').addEventListener('change', recalc);
 
     /* ── Confetti ── */
     function spawnConfetti() {
@@ -762,7 +762,37 @@
       }
     }
 
-    /* ── Confirmation ── */
+    /* ── Confirmation modale (utilise currentCar défini par reservation.js) ── */
+    document.addEventListener('DOMContentLoaded', function () {
+      const DRIVER_PRICE = 30;
+
+      /* ── Validation par champ ── */
+    function setFieldError(inputId, errId, message) {
+      const input = document.getElementById(inputId);
+      const err   = document.getElementById(errId);
+      if (input) input.classList.add('input-error');
+      if (err)   { err.textContent = message; err.classList.add('visible'); }
+    }
+    function clearFieldError(inputId, errId) {
+      const input = document.getElementById(inputId);
+      const err   = document.getElementById(errId);
+      if (input) input.classList.remove('input-error');
+      if (err)   err.classList.remove('visible');
+    }
+    function clearAllErrors() {
+      [['client-last-name','err-last-name'],['client-first-name','err-first-name'],
+       ['client-email','err-email'],['client-phone','err-phone'],['client-cin','err-cin']]
+      .forEach(([i,e]) => clearFieldError(i,e));
+    }
+
+    /* Effacer l'erreur dès que l'utilisateur retape */
+    [['client-last-name','err-last-name'],['client-first-name','err-first-name'],
+     ['client-email','err-email'],['client-phone','err-phone'],['client-cin','err-cin']]
+    .forEach(([inputId, errId]) => {
+      const el = document.getElementById(inputId);
+      if (el) el.addEventListener('input', () => clearFieldError(inputId, errId));
+    });
+
     document.getElementById('btn-confirm').addEventListener('click', function () {
       const firstName = document.getElementById('client-first-name').value.trim();
       const lastName  = document.getElementById('client-last-name').value.trim();
@@ -772,46 +802,70 @@
       const startDate = document.getElementById('start-date').value;
       const endDate   = document.getElementById('end-date').value;
 
-      /* Validation rapide */
-      if (!firstName || !lastName || !email || !phone || !cin || !startDate || !endDate) {
-        /* Shake effect sur le bouton */
-        this.style.animation = 'none';
-        this.style.transform = 'translateX(-6px)';
-        setTimeout(() => {
-          this.style.transform = 'translateX(6px)';
-          setTimeout(() => { this.style.transform = ''; }, 80);
-        }, 80);
+      clearAllErrors();
+      let hasError = false;
+
+      if (!lastName) {
+        setFieldError('client-last-name', 'err-last-name', 'Le nom est requis');
+        hasError = true;
+      }
+      if (!firstName) {
+        setFieldError('client-first-name', 'err-first-name', 'Le prénom est requis');
+        hasError = true;
+      }
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+        setFieldError('client-email', 'err-email', email ? 'Adresse e-mail invalide' : 'L\'e-mail est requis');
+        hasError = true;
+      }
+      if (!phone || !/^[0-9\s+\-]{6,20}$/.test(phone)) {
+        setFieldError('client-phone', 'err-phone', phone ? 'Format invalide (ex: +216 99 999 999)' : 'Le téléphone est requis');
+        hasError = true;
+      }
+      if (!cin || !/^[A-Za-z0-9]{4,20}$/.test(cin)) {
+        setFieldError('client-cin', 'err-cin', cin ? 'CIN invalide (4 à 20 caractères alphanumériques)' : 'Le numéro CIN est requis');
+        hasError = true;
+      }
+
+      if (hasError) {
+        /* Shake sur le bouton + scroll vers le premier champ en erreur */
+        this.classList.remove('btn-shake');
+        void this.offsetWidth;
+        this.classList.add('btn-shake');
+        setTimeout(() => this.classList.remove('btn-shake'), 400);
+        const firstErr = document.querySelector('.input-error');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
-      /* Remplir le récapitulatif de la modale */
+      if (!startDate || !endDate) return;
+      if (!window.currentCar) return;
+
       const days = Math.round((new Date(endDate) - new Date(startDate)) / 86400000);
       const withDriver = document.getElementById('driver-option').checked;
-      const total = days * currentCar.price + (withDriver ? days * DRIVER_PRICE : 0);
+      const total = days * window.currentCar.price + (withDriver ? days * DRIVER_PRICE : 0);
 
       const fmt = d => new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
 
-      document.getElementById('cs-car').textContent    = currentCar.name;
+      document.getElementById('cs-car').textContent    = window.currentCar.name;
       document.getElementById('cs-dates').textContent  = fmt(startDate) + ' → ' + fmt(endDate) + ' (' + days + 'j)';
       document.getElementById('cs-client').textContent = firstName + ' ' + lastName;
       document.getElementById('cs-total').textContent  = total + ' DT';
 
-      /* Afficher overlay + confetti */
       spawnConfetti();
       document.getElementById('confirm-overlay').classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      /* Mettre à jour step indicator */
       document.querySelectorAll('.step')[2].classList.add('active');
       document.querySelectorAll('.step-line')[1].classList.add('done');
     });
 
-    /* Fermer overlay en cliquant fond */
-    document.getElementById('confirm-overlay').addEventListener('click', function (e) {
-      if (e.target === this) {
-        this.classList.remove('show');
-        document.body.style.overflow = '';
-      }
+      /* Fermer overlay en cliquant fond */
+      document.getElementById('confirm-overlay').addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
     });
 
   })();
