@@ -116,6 +116,32 @@ router.get("/stats", verifyAdmin, async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error: err.message });
   }
 });
+router.patch("/reservations/:id/annuler", verifyAdmin, async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: "ID invalide" });
+  }
+
+  try {
+    const [rows] = await db.query(
+      "SELECT id, statut FROM reservations WHERE id = ?",
+      [id]
+    );
+    if (!rows.length) {
+      return res.status(404).json({ message: "Réservation introuvable." });
+    }
+    
+    if (rows[0].statut !== "confirmee") {
+      return res.status(400).json({ message: "Cette réservation ne peut pas être annulée." });
+    }
+
+    await db.query("UPDATE reservations SET statut = 'annulee' WHERE id = ?", [id]);
+    res.json({ message: "Réservation annulée par l'administrateur." });
+  } catch (err) {
+    console.error("[adminRoutes] PATCH annuler", err);
+    res.status(500).json({ message: "Erreur serveur", error: err.message });
+  }
+});
 
 /* ════════════════════════════════════════
    GET /api/admin/reservations

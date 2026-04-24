@@ -48,8 +48,10 @@
 .ftab:hover  { color:var(--fg); background:rgba(255,255,255,0.04); }
 .ftab.active { color:var(--fg); background:rgba(255,255,255,0.08); }
 .ftab-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-.ftab-dot.ok { background:var(--c-success); }
-.ftab-dot.ko { background:var(--c-danger); }
+.ftab-dot.ok   { background:var(--c-success); }
+.ftab-dot.ko   { background:var(--c-danger); }
+.ftab-dot.done { background:#6b7280; }   /* gris — statut terminée */
+
 .date-range { display:flex; align-items:center; gap:8px; }
 .date-input-wrap {
   display:flex; align-items:center; gap:8px;
@@ -79,6 +81,16 @@
 .btn-reset-filters svg { width:13px; height:13px; }
 .results-summary { font-size:12px; color:var(--muted); min-height:18px; }
 .results-summary strong { color:var(--accent); }
+
+/* ── Badge statut "Terminée" ── */
+/* (les badges b-ok, b-ko, b-wait sont dans admin.css)
+   On ajoute ici b-done pour "terminée" */
+.b-done {
+  background:rgba(107,114,128,0.10);
+  color:#9ca3af;
+  border:1px solid rgba(107,114,128,0.22);
+}
+.b-done::before { background:#6b7280; }
 
 /* ── Btn annuler dans table ── */
 .btn-annuler {
