@@ -3,6 +3,7 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Search block ── */
+/* Bloc de recherche pour filtrer les réservations */
 .search-block { display:flex; flex-direction:column; gap:14px; }
 .search-bar {
   position:relative; display:flex; align-items:center;
@@ -30,6 +31,7 @@
 .search-clear svg { width:14px; height:14px; }
 
 /* ── Filtres ── */
+/* Filtres pour trier les réservations */
 .filters { display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap; }
 .filter-group { display:flex; flex-direction:column; gap:6px; }
 .filter-label { font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }

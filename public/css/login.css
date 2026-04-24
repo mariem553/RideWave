@@ -4,6 +4,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Layout page ────────────────────────────────────────────── */
+/* Mise en page de la page de connexion centrée */
 .login-page {
     min-height: 100vh;
     display: flex;
@@ -15,6 +16,7 @@
 }
 
 /* ─── Fond ambient ───────────────────────────────────────────── */
+/* Effets de fond lumineux pour créer une ambiance */
 .login-bg-glow-1 {
     position: absolute;
     top: -30%;
@@ -46,6 +48,7 @@
 }
 
 /* ─── Carte principale ───────────────────────────────────────── */
+/* Carte contenant le formulaire de connexion */
 .login-card {
     width: 100%;
     max-width: 480px;

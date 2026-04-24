@@ -48,6 +48,7 @@
     padding-bottom: 280px;
 }
 
+/* Image de fond de la voiture avec animation de zoom lent */
 .hero-bg-car {
     position: absolute;
     inset: 0;
@@ -63,6 +64,7 @@
     100% { transform: scale(1.10) translateX(-20px); }
 }
 
+/* Overlay sombre pour améliorer la lisibilité du texte sur le fond */
 .hero-overlay {
     position: absolute;
     inset: 0;
@@ -327,6 +329,7 @@
     z-index: 10;
     padding: 0 24px;
 }
+/* Panneau de réservation avec formulaire d'entrée */
 .booking-panel {
     max-width: 1000px;
     margin: 0 auto;
@@ -515,6 +518,7 @@
         justify-content: space-between;
     }
 }
+/* Conteneur pour l'effet de retournement 3D des cartes de véhicules */
 .vehicle-flip-wrapper {
     perspective: 1200px;
     height: 460px;
@@ -738,6 +742,7 @@
    SERVICES
    ═══════════════════════════════════════════════════════════════ */
 .services-section { padding: 80px 24px; }
+/* Carte de service avec effet de survol */
 .service-card {
     padding: 32px 28px;
     border-radius: 28px;

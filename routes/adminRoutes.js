@@ -3,17 +3,20 @@
    Chemin : routes/adminRoutes.js
    ═══════════════════════════════════════════════════════════ */
 
+// Import des modules nécessaires
 const express         = require("express");
 const router          = express.Router();
 const db              = require("../config/db");
 const { verifyAdmin } = require("../middleware/auth");
 const { mapVoiture }  = require("../utils/mapVoiture");
 
+// Requête SQL pour sélectionner une ligne de voiture
 const SELECT_VOITURE_ROW = `SELECT id, marque, modele, annee, prix_jour, image_url, disponible,
   categorie, carburant, transmission, places,
   description, puissance_cv, vitesse_max_kmh, accel_0_100
   FROM voitures`;
 
+// Fonction pour parser les champs de présentation de la voiture
 function parsePresentationFields(body) {
   const description =
     body.description != null && String(body.description).trim() !== ""
@@ -32,6 +35,7 @@ function parsePresentationFields(body) {
   };
 }
 
+// Fonction pour parser les détails techniques de la voiture
 function parseVoitureDetails(body) {
   const categorie =
     body.categorie != null && String(body.categorie).trim() !== ""

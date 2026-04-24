@@ -1,11 +1,14 @@
+// Routes pour la gestion des réservations
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const { verifyToken } = require("../middleware/auth");
 
+// Prix par jour pour le service chauffeur
 const DRIVER_PRICE_PER_DAY = 30;
 
 /** Date locale du serveur au format YYYY-MM-DD */
+// Fonction pour obtenir la date actuelle au format YYYY-MM-DD
 function todayDateString() {
   const d = new Date();
   const y = d.getFullYear();
@@ -18,6 +21,7 @@ function todayDateString() {
  * Nombre de jours de location (date_fin exclusive pour le calcul métier courant :
  * du 26 au 27 = 1 jour facturé si même logique que le front).
  */
+// Fonction pour calculer le nombre de jours entre deux dates
 function rentalDays(dateDebut, dateFin) {
   const start = new Date(dateDebut + "T12:00:00");
   const end = new Date(dateFin + "T12:00:00");
@@ -26,6 +30,7 @@ function rentalDays(dateDebut, dateFin) {
   return Math.ceil(diff / 86400000);
 }
 
+// Route pour créer une nouvelle réservation
 router.post("/", verifyToken, async (req, res) => {
   const {
     voiture_id,

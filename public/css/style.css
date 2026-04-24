@@ -4,6 +4,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Variables CSS globales ────────────────────────────────── */
+/* Définition des variables CSS pour les couleurs et dimensions globales */
 :root {
     --bg:           #070709;
     --bg-card:      #0c0c10;
@@ -26,6 +27,7 @@
 }
 
 /* ─── Reset ──────────────────────────────────────────────────── */
+/* Reset des styles par défaut pour une base cohérente */
 *, *::before, *::after {
     margin: 0;
     padding: 0;

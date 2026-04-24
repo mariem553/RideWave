@@ -1,3 +1,4 @@
+// Import des modules nécessaires pour le serveur
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -5,32 +6,34 @@ require("dotenv").config();
 
 const app = express();
 
-// Middlewares
+// Configuration des middlewares pour gérer les requêtes
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Fichiers statiques - mount at root
+// Servir les fichiers statiques depuis le dossier public
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 
-// Routes
+// Import des routes de l'application
 const userRoutes = require("./routes/userRoutes");
 const voitureRoutes = require("./routes/voitureRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 
+// Montage des routes API
 app.use("/api/users", userRoutes);
 app.use("/api/voitures", voitureRoutes);
 app.use("/api/reservations", reservationRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Route test
+// Route de test pour vérifier le statut de l'API
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "RideWave API running ✅" });
 });
 
 const db = require("./config/db");
+// Route pour vérifier la connexion à la base de données
 app.get("/api/health/db", async (req, res) => {
   try {
     await db.query("SELECT 1");

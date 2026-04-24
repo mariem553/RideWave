@@ -3,6 +3,7 @@
    Responsable : Oumayma
    =============================================================== */
 
+/* Page principale du profil utilisateur */
 .profile-page {
     min-height: 100vh;
     padding-top: 90px;
@@ -10,6 +11,7 @@
 }
 
 /* ── Hero ──────────────────────────────────────────────────────── */
+/* Section hero du profil avec effets visuels */
 .profile-hero {
     position: relative;
     padding: 48px 24px 56px;
@@ -41,6 +43,7 @@
     gap: 32px; flex-wrap: wrap;
 }
 
+/* Section identité de l'utilisateur avec avatar */
 .profile-identity { display: flex; align-items: center; gap: 24px; }
 
 .profile-avatar {
