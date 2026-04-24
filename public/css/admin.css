@@ -48,6 +48,7 @@ img { display:block; max-width:100%; }
 /* ════════════════════════════
    LOADING SCREEN
 ════════════════════════════ */
+/* Écran de chargement affiché au démarrage de l'application */
 #loading-screen {
   position:fixed; inset:0; z-index:999;
   background:var(--bg);
@@ -85,11 +86,13 @@ img { display:block; max-width:100%; }
 /* ════════════════════════════
    LAYOUT
 ════════════════════════════ */
+/* Conteneur principal de l'interface admin */
 .admin-wrap { display:flex; min-height:100vh; }
 
 /* ════════════════════════════
    SIDEBAR
 ════════════════════════════ */
+/* Barre latérale de navigation avec logo et menu */
 .sidebar {
   width:var(--sidebar-w);
   background:var(--bg-card);
@@ -323,6 +326,8 @@ img { display:block; max-width:100%; }
 .b-ko::before  { background:var(--c-danger); }
 .b-wait { background:rgba(245,158,11,0.10); color:var(--c-warning); border:1px solid rgba(245,158,11,0.20); }
 .b-wait::before { background:var(--c-warning); }
+.b-done { background:rgba(107,114,128,0.10); color:#9ca3af; border:1px solid rgba(107,114,128,0.22); }
+.b-done::before { background:#6b7280; }
 
 /* Btn action table */
 .td-act { opacity:0; transition:opacity .18s; }

@@ -5,6 +5,7 @@
    POST /api/users/login
    =============================================================== */
 
+// Import des modules nécessaires
 const express = require('express');
 const router  = express.Router();
 const db      = require('../config/db');
@@ -13,6 +14,7 @@ const jwt     = require('jsonwebtoken');
 /* ===============================================================
    POST /api/users/register — Inscription (role client par defaut)
    =============================================================== */
+// Route pour l'inscription d'un nouvel utilisateur
 router.post('/register', async (req, res) => {
     const { nom, email, password } = req.body;
 

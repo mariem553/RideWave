@@ -1,5 +1,7 @@
+// Middleware d'authentification utilisant JWT
 const jwt = require("jsonwebtoken");
 
+// Fonction pour vérifier la validité du token JWT
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
@@ -16,6 +18,7 @@ function verifyToken(req, res, next) {
   }
 }
 
+// Fonction pour vérifier les droits d'administrateur
 function verifyAdmin(req, res, next) {
   verifyToken(req, res, () => {
     if (req.user.role !== "admin") {
@@ -25,4 +28,5 @@ function verifyAdmin(req, res, next) {
   });
 }
 
+// Export des fonctions middleware
 module.exports = { verifyToken, verifyAdmin };

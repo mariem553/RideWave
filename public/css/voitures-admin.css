@@ -2,6 +2,7 @@
    admin-voitures.css — Page gestion voitures
    ═══════════════════════════════════════════════════════════ */
 
+/* En-tête de la page avec titre et actions */
 .page-header {
   display:flex; align-items:flex-end; justify-content:space-between;
   margin-bottom:20px; flex-wrap:wrap; gap:12px;
@@ -23,6 +24,7 @@
 .stat-pill.green { border-color:rgba(13,148,136,0.25); background:rgba(13,148,136,0.08); color:var(--c-success); }
 .stat-pill.red   { border-color:rgba(239,68,68,0.25);  background:rgba(239,68,68,0.08);  color:var(--c-danger);  }
 
+/* Bouton pour ajouter une nouvelle voiture */
 /* Btn add */
 .btn-add {
   display:flex; align-items:center; gap:7px;

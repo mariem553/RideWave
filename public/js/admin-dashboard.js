@@ -13,14 +13,23 @@ const MOCK = {
   reservationsConfirmees:  19,
   reservationsAnnulees:    3,
   dernieresReservations: [
-    { id:1, client:'Ahmed Ben Ali',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-03-10', dateFin:'2026-03-13', totalPrix:255.00, statut:'confirmee' },
-    { id:2, client:'Sana Trabelsi',  marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-03-05', dateFin:'2026-03-07', totalPrix:190.00, statut:'annulee'   },
+    { id:1, client:'Ahmed Ben Ali',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-01-10', dateFin:'2026-01-13', totalPrix:255.00, statut:'confirmee' },
+    { id:2, client:'Sana Trabelsi',  marque:'Volkswagen', modele:'Golf',    dateDebut:'2026-01-05', dateFin:'2026-01-07', totalPrix:190.00, statut:'annulee'   },
     { id:3, client:'Karim Mansouri', marque:'Renault',    modele:'Clio',    dateDebut:'2026-04-01', dateFin:'2026-04-05', totalPrix:260.00, statut:'confirmee' },
-    { id:4, client:'Nadia Bouaziz',  marque:'Peugeot',    modele:'308',     dateDebut:'2026-04-12', dateFin:'2026-04-16', totalPrix:440.00, statut:'confirmee' },
-    { id:5, client:'Youssef Hamdi',  marque:'Dacia',      modele:'Sandero', dateDebut:'2026-04-20', dateFin:'2026-04-22', totalPrix:110.00, statut:'annulee'   },
-    { id:6, client:'Sana Trabelsi',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-05-01', dateFin:'2026-05-04', totalPrix:255.00, statut:'confirmee' },
+    { id:4, client:'Nadia Bouaziz',  marque:'Peugeot',    modele:'308',     dateDebut:'2026-04-28', dateFin:'2026-05-01', totalPrix:440.00, statut:'confirmee' },
+    { id:5, client:'Youssef Hamdi',  marque:'Dacia',      modele:'Sandero', dateDebut:'2026-03-20', dateFin:'2026-03-22', totalPrix:110.00, statut:'annulee'   },
+    { id:6, client:'Sana Trabelsi',  marque:'Toyota',     modele:'Corolla', dateDebut:'2026-05-10', dateFin:'2026-05-13', totalPrix:255.00, statut:'confirmee' },
   ],
 };
+
+/* ── Statut effectif (identique à admin-reservations.js) ── */
+const TODAY_ISO = new Date().toISOString().slice(0, 10);
+
+function effectiveStatut(r) {
+  if (r.statut === 'annulee') return 'annulee';
+  if (r.dateFin && r.dateFin < TODAY_ISO) return 'terminee';
+  return r.statut;
+}
 
 /* ════════════════════════════
    API
@@ -48,14 +57,27 @@ const fmtDate  = s => {
   const d = new Date(s);
   return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`;
 };
-const initials = n => n.split(' ').map(x => x[0]).join('').substring(0,2).toUpperCase();
-const nights   = (d1,d2) => { const n = Math.round((new Date(d2)-new Date(d1))/86400000); return n>0?`${n} nuit${n>1?'s':''}`:'' };
-const fmtPrix  = n => `${Number(n).toFixed(2)} TND`;
-const bCls     = s => ({ confirmee:'b-ok', annulee:'b-ko' })[s?.toLowerCase()] || 'b-wait';
-const bLbl     = s => ({ confirmee:'Confirmée', annulee:'Annulée' })[s?.toLowerCase()] || s || '—';
-
-/* ── Construit le nom voiture depuis marque + modele ── */
+const initials   = n => n.split(' ').map(x => x[0]).join('').substring(0,2).toUpperCase();
+const nights     = (d1,d2) => { const n = Math.round((new Date(d2)-new Date(d1))/86400000); return n>0?`${n} nuit${n>1?'s':''}`:'' };
+const fmtPrix    = n => `${Number(n).toFixed(2)} TND`;
 const nomVoiture = r => esc((r.marque || '') + ' ' + (r.modele || ''));
+
+function bCls(statut) {
+  switch (statut) {
+    case 'confirmee': return 'b-ok';
+    case 'annulee':   return 'b-ko';
+    case 'terminee':  return 'b-done';
+    default:          return 'b-wait';
+  }
+}
+function bLbl(statut) {
+  switch (statut) {
+    case 'confirmee': return 'Confirmée';
+    case 'annulee':   return 'Annulée';
+    case 'terminee':  return 'Terminée';
+    default:          return statut || '—';
+  }
+}
 
 /* ════════════════════════════
    COUNTER ANIMATION
@@ -138,7 +160,9 @@ function renderTable(rows) {
     return;
   }
 
-  tbody.innerHTML = visible.map(r => `
+  tbody.innerHTML = visible.map(r => {
+    const es = effectiveStatut(r);
+    return `
     <tr>
       <td>
         <div class="td-client">
@@ -151,15 +175,16 @@ function renderTable(rows) {
         ${fmtDate(r.dateDebut)}<span class="td-sep">→</span>${fmtDate(r.dateFin)}
         <br><span style="font-size:11px;color:var(--muted)">${nights(r.dateDebut,r.dateFin)}</span>
       </td>
-      <td><span class="badge ${bCls(r.statut)}">${esc(bLbl(r.statut))}</span></td>
+      <td><span class="badge ${bCls(es)}">${esc(bLbl(es))}</span></td>
       <td class="td-act">
         <button class="btn-see" data-id="${r.id}">Voir</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   tbody.querySelectorAll('.btn-see[data-id]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const r = rows.find(x => x.id === parseInt(btn.dataset.id));
+      const r = rows.find(x => x.id === parseInt(btn.dataset.id, 10));
       if (r) openDetailModal(r);
     });
   });
@@ -189,6 +214,8 @@ function openDetailModal(r) {
   const overlay = document.getElementById('detailOverlay');
   if (!overlay) return;
 
+  const es = effectiveStatut(r);
+
   const imgContent = r.voitureImage
     ? `<img src="${esc(r.voitureImage)}" alt="${nomVoiture(r)}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover"/>`
     : `<div class="modal-img-fallback">
@@ -214,7 +241,7 @@ function openDetailModal(r) {
             ${esc(r.marque || '')} <em>${esc(r.modele || '')}</em>
           </div>
         </div>
-        <span class="badge ${bCls(r.statut)}">${bLbl(r.statut)}</span>
+        <span class="badge ${bCls(es)}">${bLbl(es)}</span>
       </div>
       <div class="detail-divider"></div>
       <div class="detail-section-label">Réservation #${r.id}</div>

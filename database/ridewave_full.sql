@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS reservations (
   client_telephone VARCHAR(30) NOT NULL,
   option_chauffeur TINYINT(1) NOT NULL DEFAULT 0,
   total_prix  DECIMAL(10,2)  NOT NULL,
-  statut      ENUM('confirmee','annulee') NOT NULL DEFAULT 'confirmee',
+  statut      ENUM('confirmee','annulee','terminee') NOT NULL DEFAULT 'confirmee',
   created_at  TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT fk_reservation_user

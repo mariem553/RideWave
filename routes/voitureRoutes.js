@@ -1,13 +1,16 @@
+// Routes pour la gestion des voitures
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const { mapVoiture } = require("../utils/mapVoiture");
 
+// Requête SQL pour sélectionner les informations des voitures
 const SELECT_VOITURE = `SELECT id, marque, modele, annee, prix_jour, image_url, disponible,
   categorie, carburant, transmission, places,
   description, puissance_cv, vitesse_max_kmh, accel_0_100
   FROM voitures`;
 
+// Route pour obtenir la liste de toutes les voitures
 router.get("/", async (req, res) => {
   try {
     const [rows] = await db.query(`${SELECT_VOITURE} ORDER BY id ASC`);
@@ -18,6 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Route pour obtenir une voiture spécifique par son ID
 router.get("/:id", async (req, res) => {
   const id = parseInt(req.params.id, 10);
   if (Number.isNaN(id)) {
@@ -35,4 +39,5 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Export du router
 module.exports = router;

@@ -4,6 +4,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Layout page ────────────────────────────────────────────── */
+/* Mise en page de la page d'inscription centrée */
 .register-page {
     min-height: 100vh;
     display: flex;
@@ -15,6 +16,7 @@
 }
 
 /* ─── Fond ambient ───────────────────────────────────────────── */
+/* Effets de fond lumineux pour l'ambiance */
 .register-bg-glow-1 {
     position: absolute;
     top: -30%;
@@ -46,6 +48,7 @@
 }
 
 /* ─── Carte principale ───────────────────────────────────────── */
+/* Carte contenant le formulaire d'inscription */
 .register-card {
     width: 100%;
     max-width: 500px;
