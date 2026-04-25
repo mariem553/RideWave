@@ -1,6 +1,6 @@
 -- ============================================
 --  RideWave — locationvoiture_db — Données de test
---  1 admin + 2 clients + 5 voitures + 2 réservations
+--  1 admin + 2 clients + 18 voitures + 2 réservations
 --  Exécuter après schema.sql (même base : locationvoiture_db)
 -- ============================================
 
@@ -17,12 +17,25 @@ INSERT INTO users (nom, email, password, role) VALUES
 -- ─────────────────────────────────────────────
 --  VOITURES
 -- ─────────────────────────────────────────────
-INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible) VALUES
-  ('Toyota',    'Corolla',   2021, 85.00,  '/images/voitures/corolla.jpg',   1),
-  ('Renault',   'Clio',      2022, 65.00,  '/images/voitures/clio.jpg',      1),
-  ('Volkswagen','Golf',      2020, 95.00,  '/images/voitures/golf.jpg',      1),
-  ('Peugeot',   '308',       2023, 110.00, '/images/voitures/peugeot308.jpg',1),
-  ('Dacia',     'Sandero',   2022, 55.00,  '/images/voitures/sandero.jpg',   0);
+INSERT INTO voitures (marque, modele, annee, prix_jour, image_url, disponible, categorie, carburant, transmission, places, description) VALUES
+  ('Toyota',    'Corolla',   2021, 85.00,  '/images/voitures/corolla.jpg',   1, 'Berline', 'Essence', 'Auto', 5, 'Voiture fiable et économique'),
+  ('Renault',   'Clio',      2022, 65.00,  '/images/voitures/clio.jpg',      1, 'Citadine', 'Essence', 'Manuel', 5, 'Petit budget, grand confort'),
+  ('Volkswagen','Golf',      2020, 95.00,  '/images/voitures/golf.jpg',      1, 'Berline', 'Essence', 'Auto', 5, 'Voiture sportive et dynamique'),
+  ('Peugeot',   '308',       2023, 110.00, '/images/voitures/peugeot308.jpg',1, 'Berline', 'Diesel', 'Auto', 5, 'Design moderne et performante'),
+  ('Dacia',     'Sandero',   2022, 55.00,  '/images/voitures/sandero.jpg',   0, 'SUV', 'Essence', 'Manuel', 5, 'Robuste et économique'),
+  ('BMW',       'X6',        2023, 180.00, '/images/voitures/bmw-x6.webp',   1, 'SUV Luxe', 'Essence', 'Auto', 5, 'Puissance et élégance'),
+  ('Fiat',      '500X',      2022, 78.00,  '/images/voitures/fiat500X.jpg',  1, 'SUV', 'Essence', 'Auto', 5, 'Compact et maniable'),
+  ('Ford',      'Ranger',    2023, 145.00, '/images/voitures/Ford-Ranger.jpg', 1, 'Pickup', 'Diesel', 'Auto', 5, 'Puissant et spacieux'),
+  ('Hyundai',   'Tucson',    2022, 92.00,  '/images/voitures/hyundai Tucson.jpg', 1, 'SUV', 'Essence', 'Auto', 5, 'Moderne et fonctionnel'),
+  ('Kia',       'Sportage',  2023, 100.00, '/images/voitures/kia-sportage.jpg', 1, 'SUV', 'Essence', 'Auto', 5, 'Style et performance'),
+  ('Lamborghini','Urus',     2023, 500.00, '/images/voitures/lamborghini-urus.jpg', 1, 'SUV Luxe', 'Essence', 'Auto', 4, 'Luxe extrême et puissance'),
+  ('Mercedes-Benz', 'AMG A45', 2023, 250.00, '/images/voitures/mercedes-amgA45.jpg', 1, 'Berline Luxe', 'Essence', 'Auto', 5, 'Performance et prestige'),
+  ('Mini',      'Cooper',    2022, 88.00,  '/images/voitures/mini cooper.jpg', 1, 'Citadine', 'Essence', 'Auto', 4, 'Rétro chic et ludique'),
+  ('Porsche',   '911',       2023, 450.00, '/images/voitures/porsche-911.jpg', 1, 'Sport', 'Essence', 'Auto', 2, 'Sportive légendaire'),
+  ('Land Rover','Range Rover', 2023, 220.00, '/images/voitures/Range Rover.jpg', 1, 'SUV Luxe', 'Diesel', 'Auto', 5, 'Adventure et confort'),
+  ('Kia',       'Stonic',    2022, 85.00,  '/images/voitures/S0-modele--kia-stonic.jpg', 1, 'SUV', 'Essence', 'Auto', 5, 'Compact urbain'),
+  ('Toyota',    'Yaris Cross Hybride', 2023, 105.00, '/images/voitures/toyota-yaris-cross-hybride.jpg', 1, 'SUV', 'Hybride', 'Auto', 5, 'Écologique et économe'),
+  ('Toyota',    'Prado',     2023, 135.00, '/images/voitures/toyota_prado.jpg', 1, 'SUV', 'Diesel', 'Auto', 7, 'Grand confort familial');
 
 -- ─────────────────────────────────────────────
 --  RESERVATIONS (exemples)

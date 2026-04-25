@@ -215,25 +215,13 @@ function openDetailModal(r) {
   if (!overlay) return;
 
   const es = effectiveStatut(r);
-
-  const imgContent = r.voitureImage
-    ? `<img src="${esc(r.voitureImage)}" alt="${nomVoiture(r)}" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:cover"/>`
-    : `<div class="modal-img-fallback">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/>
-          <rect x="9" y="11" width="14" height="10" rx="2"/>
-          <circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        </svg>
-        <span>${nomVoiture(r)}</span>
-      </div>`;
-
   overlay.querySelector('.detail-modal').innerHTML = `
     <button class="detail-close" id="detailClose">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
-    <div class="detail-img">${imgContent}</div>
+    <div><br><br></div>
     <div class="detail-body">
       <div class="detail-car-header">
         <div>

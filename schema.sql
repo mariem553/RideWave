@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS voitures (
   transmission VARCHAR(60)  NOT NULL DEFAULT 'Auto',
   places       TINYINT UNSIGNED NOT NULL DEFAULT 5,
   description      TEXT         NULL,
-  puissance_cv     VARCHAR(20)  NULL DEFAULT NULL,
-  vitesse_max_kmh  VARCHAR(20)  NULL DEFAULT NULL,
-  accel_0_100      VARCHAR(20)  NULL DEFAULT NULL,
+  puissance_cv     VARCHAR(20)  NULL DEFAULT 120,
+  vitesse_max_kmh  VARCHAR(20)  NULL DEFAULT 100,
+  accel_0_100      VARCHAR(20)  NULL DEFAULT 60,
   created_at TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 

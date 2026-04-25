@@ -483,7 +483,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       'berline': 'Berline',
       'cabriolet': 'Cabriolet',
       'electrique': 'Électrique',
-      'collection': 'Collection'
     };
     const mappedType = typeMap[urlType.toLowerCase()] || urlType;
     state.type = mappedType;
