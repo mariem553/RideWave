@@ -126,7 +126,7 @@ function getFiltered() {
   let data = VOITURES.filter(v => {
     if (q && !(`${v.marque} ${v.modele}`).toLowerCase().includes(q)) return false;
     if (state.marque    && v.marque    !== state.marque)    return false;
-    if (state.type      && v.categorie !== state.type)      return false;
+    if (state.type && v.categorie.toLowerCase() !== state.type.toLowerCase()) return false;
     if (state.carburant && v.carburant !== state.carburant) return false;
     if (state.prix      && v.prix_jour > parseInt(state.prix)) return false;
     if (state.dispo     && !v.disponible)                   return false;
@@ -478,12 +478,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (urlType) {
     // Mapper la valeur de l'URL (en minuscules) vers la valeur en majuscules
     const typeMap = {
-      'sport': 'Sport',
+      'compacte' : 'Compacte',
       'suv': 'SUV',
       'berline': 'Berline',
-      'cabriolet': 'Cabriolet',
-      'electrique': 'Électrique',
-      'collection': 'Collection'
+      'electrique': 'Electrique',
     };
     const mappedType = typeMap[urlType.toLowerCase()] || urlType;
     state.type = mappedType;
