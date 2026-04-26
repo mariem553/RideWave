@@ -1,4 +1,6 @@
-// Middleware d'authentification utilisant JWT
+// auth.js — middleware d'authentification JWT
+// Vérifie le token JWT envoyé dans Authorization et expose l'utilisateur
+// pour les routes protégées. Fournit également une vérification des droits admin.
 const jwt = require("jsonwebtoken");
 
 // Fonction pour vérifier la validité du token JWT
@@ -30,3 +32,5 @@ function verifyAdmin(req, res, next) {
 
 // Export des fonctions middleware
 module.exports = { verifyToken, verifyAdmin };
+
+// Ce middleware vérifie les JWT et applique le contrôle d'accès administrateur.

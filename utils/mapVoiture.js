@@ -1,6 +1,7 @@
-/**
- * Forme JSON commune pour GET /api/voitures et réponses admin POST/PUT.
- */
+// mapVoiture.js — normalisation des données véhicule
+// Ce fichier prépare les objets voiture pour l'API en nettoyant les champs,
+// convertissant les types, en fournissant des valeurs par défaut et en
+// gérant l'URL de l'image ou une image de remplacement.
 const PLACEHOLDER_IMG =
   "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=800&q=80";
 
@@ -56,3 +57,6 @@ function mapVoiture(row) {
 }
 
 module.exports = { mapVoiture, PLACEHOLDER_IMG };
+
+// Ce fichier transforme les lignes SQL des voitures en objets JSON expurgés et prêts pour le front.
+

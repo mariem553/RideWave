@@ -1,7 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   main.js — JS COMMUN — RIDEWAVE
-   Responsable : Mariem
-   Injecté sur TOUTES les pages.
+   main.js — scripts communs RideWave
+   Description :
+   - active le lien de navigation selon la page chargée
+   - fait passer la barre de navigation en mode scrolled
+   - gère le menu mobile et la fermeture des liens
+   - met à jour l'état auth pour la barre de navigation
+   - initialise le scroll vers l'ancre et le reveal global
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Active nav link (selon la page courante) ───────────────── */
@@ -117,3 +121,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.RW_setupScrollReveal = setupScrollReveal;
 });
+
+// Fonctions partagées pour toutes les pages : navigation, menu mobile, état auth et behavior commun.

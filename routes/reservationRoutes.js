@@ -1,4 +1,9 @@
-// Routes pour la gestion des réservations
+// reservationRoutes.js — routes API de réservation
+// Fournit :
+// - POST /api/reservations : création de réservation pour utilisateur connecté
+// - GET /api/reservations/mes-reservations : historique de l'utilisateur
+// - PATCH /api/reservations/:id/annuler : annulation sécurisée de réservation
+// Utilise verifyToken pour protéger les routes et calcule le prix total.
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
@@ -248,3 +253,6 @@ router.patch("/:id/annuler", verifyToken, async (req, res) => {
 });
 
 module.exports = router;
+
+// Routes de création, consultation et annulation des réservations.
+

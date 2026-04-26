@@ -1,5 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
-   admin-voitures.js — RideWave Admin (données MySQL)
+   admin-voitures.js — RideWave Admin Gestion des véhicules
+   Description :
+   - charge les véhicules depuis l'API /api/voitures
+   - affiche la liste et le panneau de détail du véhicule sélectionné
+   - permet l'ajout, la modification et la suppression via l'API admin
+   - met à jour les statistiques et l'affichage en conséquence
    ═══════════════════════════════════════════════════════════ */
 'use strict';
 
@@ -375,3 +380,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   hideLoading();
 });
+
+// Administration des voitures : liste, sélection, création, modification et suppression.

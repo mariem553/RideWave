@@ -1,8 +1,11 @@
 /* ===============================================================
-   profile.js - Page Profil & Mes Reservations
-   Responsable : Oumayma
-   Phase 1 : donnees statiques
-   Phase 2 : remplacer par les vrais fetch()
+   profile.js — page profil client et historique de réservations
+   Description :
+   - protège l'accès en vérifiant le token localStorage
+   - affiche les informations du client et son rôle
+   - charge les réservations de l'utilisateur depuis l'API
+   - permet le filtrage, le tri et l'annulation côté client
+   - gère l'interface des onglets, le toast et la déconnexion
    =============================================================== */
 
 /* --- Auth guard ----------------------------------------------- */
@@ -289,3 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initLogout();
   loadReservations();
 });
+
+// Page profil client : affichage des informations utilisateur, réservations, filtres et actions.
+

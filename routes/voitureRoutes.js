@@ -1,4 +1,8 @@
-// Routes pour la gestion des voitures
+// voitureRoutes.js — routes API des véhicules
+// Fournit :
+// - GET /api/voitures : liste complète des voitures
+// - GET /api/voitures/:id : détails d'une voiture par son identifiant
+// Ces routes lisent les données MySQL, les normalisent avec mapVoiture et renvoient du JSON.
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
@@ -41,3 +45,6 @@ router.get("/:id", async (req, res) => {
 
 // Export du router
 module.exports = router;
+
+// Routes de l'API pour récupérer la flotte de voitures depuis la base MySQL.
+

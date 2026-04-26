@@ -1,7 +1,11 @@
 /* ===============================================================
-   auth.js - Authentification (Login + Register)
-   Responsable : Oumayma
-   Phase 2 : vrais fetch() vers l'API
+   auth.js — Authentification client
+   Description :
+   - gère les écrans login et inscription
+   - valide les formulaires et affiche les erreurs
+   - masque/affiche les mots de passe
+   - stocke le token JWT et redirige selon le rôle
+   - communique avec l'API utilisateurs via fetch()
    =============================================================== */
 
 /* ===============================================================
@@ -332,3 +336,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initLogin();
   initRegister();
 });
+
+// Gestion du formulaire de login et d'inscription côté client, avec validation et envoi API.

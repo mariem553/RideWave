@@ -1,5 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
    admin-dashboard.js — RideWave Admin Dashboard
+   Description :
+   - récupère les statistiques globales via /api/admin/stats
+   - anime les KPI de la flotte et des réservations
+   - affiche un tableau des dernières réservations récentes
+   - ouvre une modale de détail pour chaque réservation
+   - gère le rafraîchissement, l'authentification et l'état admin
    ═══════════════════════════════════════════════════════════ */
 'use strict';
 
@@ -311,3 +317,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     hideLoading();
   }
 });
+
+// Tableau de bord admin : statistiques, indicateurs et résumé des dernières réservations.

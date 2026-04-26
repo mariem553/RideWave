@@ -1,6 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
-   admin-sidebar.js — Sidebar commune injectée dans toutes
-   les pages admin.
+   admin-sidebar.js — Sidebar admin partagée
+   Description :
+   - vérifie l'authentification admin avant accès aux pages
+   - fournit des helpers pour le token et l'utilisateur admin
+   - construit le menu latéral avec les liens actifs
+   - gère l'ouverture mobile et la déconnexion
    ═══════════════════════════════════════════════════════════ */
 'use strict';
 
@@ -161,3 +165,5 @@ function hideLoading() {
   el.classList.add('hidden');
   setTimeout(() => el.remove(), 520);
 }
+
+// Sidebar et helpers communs pour l'interface d'administration.

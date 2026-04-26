@@ -1,6 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   reservation.js — Page Réservation
-   Voitures et enregistrement via API (MySQL)
+   reservation.js — logique de la page de réservation
+   Description :
+   - récupère le véhicule demandé via /api/voitures/:id
+   - met à jour le récapitulatif de prix et la durée de location
+   - valide les informations client et les dates sélectionnées
+   - envoie la réservation vers /api/reservations avec JWT
+   - affiche le message de confirmation ou d'erreur côté UI
    ═══════════════════════════════════════════════════════════════ */
 
    const DRIVER_PRICE_PER_DAY = 30;
@@ -341,3 +346,5 @@
    }
    
    document.addEventListener("DOMContentLoaded", initReservationPage);
+
+// Logique de la page de réservation : chargement du véhicule, calcul des tarifs et envoi de la réservation.

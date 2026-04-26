@@ -1,4 +1,9 @@
-// Import des modules nécessaires pour le serveur
+// server.js — point d'entrée Express
+// Ce fichier :
+// - configure les middlewares CORS, JSON et upload de formulaires
+// - sert les fichiers statiques depuis public et views
+// - monte les routes utilisateurs, voitures, réservations et admin
+// - expose un endpoint de santé pour vérifier l'API et la DB
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -83,3 +88,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚗 RideWave server running on http://localhost:${PORT}`);
 });
+
+// Ce fichier démarre le serveur Express, sert les pages publiques et monte les routes API.
+

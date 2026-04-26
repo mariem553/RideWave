@@ -1,8 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   voiture.js — Page Flotte (liste + filtres + réservation)
-   Responsable : Mariem
-   Phase 1 : données statiques JS
-   Phase 2 : remplacer par fetch('/api/voitures')
+   voiture.js — page catalogue et filtres
+   Description :
+   - charge la flotte depuis l'API MySQL
+   - gère les recherches, filtres, tris, disponibilité et pagination
+   - met à jour les tags de filtres actifs et les compteurs de résultats
+   - rend les cartes de véhicule et gère la redirection vers réservation
+   - conserve l'état de page et les paramètres URL
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── CONFIG ── */
@@ -501,3 +504,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   render();
 });
+
+// Page catalogue : chargement de la flotte, filtres, tri, pagination et gestion des réservations.
+

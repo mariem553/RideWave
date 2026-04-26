@@ -1,5 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
-   admin-reservations.js — RideWave Admin
+   admin-reservations.js — RideWave Admin Réservations
+   Description :
+   - charge la liste des réservations depuis l'API admin
+   - fournit recherche, filtres et pagination côté UI
+   - calcule les statuts effectifs et le résumé des résultats
+   - gère l'annulation d'une réservation avec confirmation
+   - peut basculer entre données mock et API réelle
    ═══════════════════════════════════════════════════════════ */
 'use strict';
 
@@ -404,3 +410,5 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (typeof hideLoading === 'function') hideLoading();
   }
 });
+
+// Administration des réservations : recherche, filtres, pagination et annulation.

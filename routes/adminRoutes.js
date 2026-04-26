@@ -1,6 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
-   adminRoutes.js — RideWave
-   Chemin : routes/adminRoutes.js
+   adminRoutes.js — routes API admin
+   Description :
+   - sécurise l'accès avec verifyAdmin
+   - fournit les statistiques du tableau de bord admin
+   - gère l'annulation administrative de réservations
+   - gère la création, modification et suppression de voitures
+   - traite les filtres et la pagination pour admin
    ═══════════════════════════════════════════════════════════ */
 
 // Import des modules nécessaires
@@ -377,3 +382,5 @@ router.delete("/voitures/:id", verifyAdmin, async (req, res) => {
 });
 
 module.exports = router;
+
+// Routes admin pour les statistiques, la gestion des réservations et la gestion des voitures.

@@ -1,7 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════
-   index.js — JS SPÉCIFIQUE à la page d'accueil
-   Responsable : Yasmine
-   Dépend de main.js (chargé avant)
+   index.js — page d'accueil RideWave
+   Description :
+   - charge les véhicules depuis l'API pour l'accueil
+   - transforme les données en cartes interactives
+   - gère le formulaire de recherche de voyages
+   - anime les compteurs et l'interface de témoignages
+   - ajoute un curseur personnalisé et des interactions UX
    ═══════════════════════════════════════════════════════════════ */
 
 /* ─── Véhicules : GET /api/voitures (MySQL) — max 6 à l’accueil ─── */
@@ -535,3 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Script de la page d'accueil : chargement des véhicules, formulaires et animations d'interface.
+

@@ -1,8 +1,9 @@
 /* ===============================================================
-   userRoutes.js - Routes Utilisateurs
-   Responsable : Oumayma
-   POST /api/users/register
-   POST /api/users/login
+   userRoutes.js — routes API utilisateurs
+   Description :
+   - POST /api/users/register : création de compte client
+   - POST /api/users/login : authentification et création de JWT
+   - vérifie l'unicité de l'e-mail et génère le token avec role
    =============================================================== */
 
 // Import des modules nécessaires
@@ -120,3 +121,5 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+// Routes d'authentification et d'inscription des utilisateurs.

@@ -1,7 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════
-   data.js — Données statiques des véhicules
-   Phase 1 : données locales
-   Phase 2 : remplacer par fetch('/api/voitures')
+   data.js — données statiques de démonstration
+   Description :
+   - contient une flotte de véhicules factice pour la phase 1
+   - utilise des données locales avant migration vers l'API
+   - chaque objet véhicule fournit les champs nécessaires au catalogue
    ═══════════════════════════════════════════════════════════════ */
 
 const VOITURES = [
@@ -18,3 +20,6 @@ const VOITURES = [
   {id:11,marque:'BMW',           modele:'X5 xDrive40i',    annee:2022, prix_jour:440, disponible:false, categorie:'SUV',        carburant:'Essence',    transmission:'Auto',   places:5, popularite:87, photo:'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80'},
   {id:12,marque:'Volkswagen',    modele:'Golf 8 GTI',      annee:2022, prix_jour:110, disponible:true,  categorie:'Compacte',   carburant:'Essence',    transmission:'Manuel', places:5, popularite:70, photo:'https://images.unsplash.com/photo-1632245889029-e406faaa34cd?w=800&q=80'},
 ];
+
+// Données statiques de démonstration pour la page catalogue. À remplacer par une API plus tard.
+
