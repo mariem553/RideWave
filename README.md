@@ -1,12 +1,81 @@
-# RideWave
-RideWave — Application de Location de Voitures Premium
-RideWave est une application web full-stack de location de véhicules haut de gamme, développée avec Node.js/Express en backend et du HTML/CSS/JS vanilla côté frontend, avec une base de données MySQL.
-Architecture
-Le projet suit une architecture MVC classique avec Express comme serveur, une base MySQL pour la persistance, et des pages HTML statiques servies directement. L'authentification repose sur des JWT stockés dans le localStorage.
-Fonctionnalités principales
-Côté client (utilisateurs) — Une page d'accueil soignée avec flip cards 3D pour présenter la flotte, un formulaire de recherche avec filtres (type, dates, lieu) qui redirige vers la page catalogue. Cette page catalogue offre filtrage multi-critères (marque, catégorie, carburant, prix max, disponibilité), tri, pagination et recherche textuelle en temps réel. Un flux de réservation complet permet de choisir un véhicule, remplir ses informations personnelles, sélectionner les dates et options (chauffeur privé à +30 TND/jour), avec calcul automatique du total. Le profil utilisateur affiche l'historique des réservations avec possibilité d'annulation.
-Côté admin — Un dashboard avec KPIs animés (total voitures, disponibilités, réservations confirmées/annulées) et tableau des dernières activités. La gestion de la flotte permet d'ajouter, modifier et supprimer des véhicules avec tous leurs attributs (specs techniques, description marketing, photo). La gestion des réservations offre recherche, filtrage par statut et dates, pagination, et annulation avec confirmation.
-Stack technique
-Le backend expose des routes REST : /api/users pour l'authentification, /api/voitures pour la flotte publique, /api/reservations pour les réservations client, et /api/admin pour les opérations admin protégées par middleware verifyAdmin. La base de données contient trois tables — users, voitures, reservations — avec contraintes de clés étrangères.
-Design
-L'interface adopte une esthétique dark luxury avec une palette dorée (#c9a962) sur fond très sombre, typographie mixant Cormorant Garamond (serif) pour les titres et DM Sans pour le corps, animations subtiles (shimmer, reveal au scroll, transitions CSS), et un curseur personnalisé sur la home.
+🚗 RideWave — Application de Location de Voitures Premium
+
+RideWave est une application web full-stack de location de véhicules haut de gamme.
+Elle permet aux utilisateurs de rechercher, réserver et gérer des voitures de luxe, tandis qu’un espace administrateur assure la gestion complète de la flotte et des réservations.
+
+🏗️ Architecture
+
+Le projet suit une architecture MVC classique :
+
+Backend : Node.js + Express
+Frontend : HTML / CSS / JavaScript vanilla
+Base de données : MySQL
+Authentification : JWT stockés dans le localStorage
+
+Le serveur Express expose des API REST et sert des pages HTML statiques.
+
+✨ Fonctionnalités
+👤 Côté utilisateur
+🏠 Page d’accueil moderne avec flip cards 3D présentant la flotte
+🔎 Formulaire de recherche avec filtres (type, dates, lieu)
+🚗 Catalogue de véhicules avec :
+filtres multi-critères (marque, catégorie, carburant, prix, disponibilité)
+tri dynamique
+pagination
+recherche en temps réel
+📅 Système de réservation complet :
+sélection de véhicule
+choix des dates
+options (ex : chauffeur privé +30 TND/jour)
+calcul automatique du prix total
+👤 Profil utilisateur :
+historique des réservations
+annulation de réservation
+🛠️ Côté administrateur
+📊 Dashboard avec KPIs animés :
+total voitures
+voitures disponibles
+réservations confirmées / annulées
+📋 Gestion des véhicules :
+ajout
+modification
+suppression
+📦 Gestion des réservations :
+filtrage par statut et dates
+recherche
+pagination
+annulation avec confirmation
+🔧 Stack technique
+Backend
+Node.js
+Express.js
+REST API
+Frontend
+HTML5
+CSS3
+JavaScript (vanilla)
+Base de données
+MySQL
+Tables :
+users
+voitures
+reservations
+🔌 API Endpoints
+/api/users → authentification & gestion utilisateurs
+/api/voitures → gestion de la flotte
+/api/reservations → gestion des réservations
+/api/admin → opérations administrateur (protégées par middleware verifyAdmin)
+🎨 Design & UI
+Style dark luxury
+Palette principale : #c9a962 (doré) sur fond sombre
+Typographies :
+Cormorant Garamond (titres)
+DM Sans (texte)
+Animations :
+shimmer effect
+reveal au scroll
+transitions CSS fluides
+Curseur personnalisé sur la page d’accueil
+🚀 Objectif du projet
+
+Offrir une expérience fluide et premium de location de voitures, combinant une interface moderne et une gestion robuste côté backend.
