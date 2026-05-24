@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RideWave | Créer un compte</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/register.css" />
+  </head>
+  <body>
+    <div class="register-page">
+      <!-- Fonds décoratifs pour l'ambiance -->
+      <!-- Fond décoratif -->
+      <div class="register-bg-glow-1"></div>
+      <div class="register-bg-glow-2"></div>
+      <div class="register-bg-grid"></div>
+
+      <!-- Carte contenant le formulaire d'inscription -->
+      <!-- Carte formulaire -->
+      <div class="register-card">
+        <!-- Logo -->
+        <div class="register-logo">
+          <div class="register-logo-icon">
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#070709"
+              stroke-width="2.5"
+            >
+              <path
+                d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"
+              />
+              <rect x="9" y="11" width="14" height="10" rx="2" />
+              <circle cx="12" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+            </svg>
+          </div>
+          <span class="register-logo-text"
+            >RIDE<span class="wave">Wave</span></span
+          >
+        </div>
+
+        <!-- Titre -->
+        <div class="register-heading">
+          <h1>Créer un compte.</h1>
+          <p>Inscription gratuite — réservation en quelques clics.</p>
+        </div>
+
+        <!-- Formulaire -->
+        <form id="register-form" class="register-form" novalidate>
+          <!-- Nom -->
+          <div>
+            <div class="register-field">
+              <input
+                type="text"
+                id="register-nom"
+                placeholder="Nom complet"
+                required
+                autocomplete="name"
+              />
+              <span class="register-field-icon">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+            </div>
+            <div class="register-hint" id="register-hint-nom"></div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <div class="register-field">
+              <input
+                type="email"
+                id="register-email"
+                placeholder="Adresse email"
+                required
+                autocomplete="email"
+              />
+              <span class="register-field-icon">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </span>
+            </div>
+            <div class="register-hint" id="register-hint-email"></div>
+          </div>
+
+          <!-- Mot de passe -->
+          <div>
+            <div class="register-field">
+              <input
+                type="password"
+                id="register-password"
+                placeholder="Mot de passe"
+                required
+                autocomplete="new-password"
+                style="padding-right: 50px"
+              />
+              <span class="register-field-icon">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              <button
+                type="button"
+                class="register-eye-btn"
+                id="register-eye-btn1"
+              >
+                <svg
+                  id="register-eye-icon1"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="register-hint" id="register-hint-pass"></div>
+            <!-- Barre force mot de passe -->
+            <div class="register-strength" id="register-strength-wrap">
+              <div class="register-strength-bar">
+                <div class="register-strength-seg" id="register-seg1"></div>
+                <div class="register-strength-seg" id="register-seg2"></div>
+                <div class="register-strength-seg" id="register-seg3"></div>
+              </div>
+              <span
+                class="register-strength-text"
+                id="register-strength-text"
+              ></span>
+            </div>
+          </div>
+
+          <!-- Confirmer mot de passe -->
+          <div>
+            <div class="register-field">
+              <input
+                type="password"
+                id="register-password2"
+                placeholder="Confirmer le mot de passe"
+                required
+                autocomplete="new-password"
+                style="padding-right: 50px"
+              />
+              <span class="register-field-icon">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </span>
+              <button
+                type="button"
+                class="register-eye-btn"
+                id="register-eye-btn2"
+              >
+                <svg
+                  id="register-eye-icon2"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="register-hint" id="register-hint-pass2"></div>
+          </div>
+
+          <!-- CGU -->
+          <div>
+            <div class="register-cgu">
+              <input type="checkbox" id="register-cgu" required />
+              <label for="register-cgu">
+                J'accepte les
+                <a href="#">Conditions Générales d'Utilisation</a> et la
+                <a href="#">Politique de Confidentialité</a> de RideWave.
+              </label>
+            </div>
+          </div>
+
+          <!-- Bouton submit -->
+          <button type="submit" class="register-btn" id="register-btn">
+            <span class="register-btn-inner" id="register-btn-inner">
+              Créer mon compte
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </span>
+            <div class="register-spinner" id="register-spinner"></div>
+          </button>
+        </form>
+
+        <!-- Lien login -->
+        <div class="register-login-link">
+          Déjà un compte ?
+          <a href="/views/login.html">Se connecter</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+  </body>
+</html>
